@@ -1,59 +1,91 @@
-import React, { useEffect, useState } from "react";
-import ProductDetailsHero from "../components/productDetails/ProductDetailsHero";
 import { useParams } from "react-router-dom";
-import Title from "../components/ui/Title";
-import ProductReview from "../components/productDetails/ProductReview";
-
-import StoreFeatures from "../components/productDetails/StoreFeatures";
-import ProductCard from "../components/ui/ProductCard";
-import { FaRegHeart } from "react-icons/fa";
 import { useWishList } from "../../context/WishlistProvider";
 import { useCart } from "../../context/CartProvider";
-import { FaHeart } from "react-icons/fa";
-import Products from "../components/ui/Products";
-import { sortByPrice } from "../../utils/sorting";
+import Title from "../components/ui/Title";
+import Products from "../components/ui/products";
+import StoreFeatures from "../components/productDetails/StoreFeatures";
+import { useQuery } from "@tanstack/react-query";
+import ProductDetailsHero from "../components/productDetails/ProductDetailsHero";
+import ProductReview from "../components/productDetails/ProductReview";
+import TitleSkeleton from "../components/ui/TitleSkeleton";
+import ProductSkeleton from "../components/ui/ProductSkeleton";
+import ProductDetailsHeroSkeleton from "../components/ui/ProductDetailsHeroSkeleton";
 
 const ProductDetails = () => {
-  const [product, setProduct] = useState({});
-  const [allProducts, setAllProducts] = useState([]);
   const { id } = useParams();
   const { wishListState, wishListDispatch, isInWishList } = useWishList();
-  const {
-    isInStock,
-    isInCart,
-    totalPrice,
-    cartItemsCount,
-    cartItems,
-    cartDispatch,
-  } = useCart();
-  useEffect(() => {
-    fetch(`https://dummyjson.com/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => setProduct(data))
-      .catch((err) => console.error("error from ProductDetailsHero", err));
-  }, [id]);
+  const { cartDispatch } = useCart();
 
-  useEffect(() => {
-    if (!product.category) return;
-    fetch(`https://dummyjson.com/products/category/${product.category}`)
-      .then((res) => res.json())
-      .then((data) => setAllProducts(data.products));
-  }, [product?.category]);
-  if (!allProducts) return <p>Loading... jjjjjj</p>;
+  const fetchProduct = async () => {
+    const res = await fetch(`https://dummyjson.com/products/${id}`);
+    if (!res.ok) throw new Error("Failed to fetch Product");
+    return res.json();
+  };
+
+  const {
+    data: product,
+    isLoading: isProductLoading,
+    error: productError,
+  } = useQuery({
+    queryKey: ["product", id],
+    queryFn: fetchProduct,
+  });
+
+  const fetchProducts = async () => {
+    const res = await fetch(
+      `https://dummyjson.com/products/category/${product?.category}`,
+    );
+    if (!res.ok) throw new Error("Failed to fetch Products");
+    const data = await res.json();
+    return data.products;
+  };
+
+  const {
+    data: relatedProducts = [],
+    isLoading: isRelatedLoading,
+    error: relatedError,
+  } = useQuery({
+    queryKey: ["products", product?.category],
+    queryFn: fetchProducts,
+    enabled: !!product?.category,
+  });
+  if (productError) return <p>{productError.message}</p>;
+  if (relatedError) return <p>{relatedError.message}</p>;
+
+  if (isRelatedLoading || isProductLoading)
+    return (
+      <>
+        <section className="custom-container section-padding">
+          <TitleSkeleton />
+          <ProductDetailsHeroSkeleton />
+        </section>
+
+        <section className="custom-container section-padding">
+          <TitleSkeleton />
+          <div
+            className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+         gap-6  "
+          >
+            {Array.from({ length: 6 }).map((_, index) => (
+              <ProductSkeleton />
+            ))}
+          </div>
+        </section>
+      </>
+    );
+
   return (
     <div className="bg-base-bg dark:bg-dark-surface">
       <section className="custom-container section-padding">
-        <Title heading={product.category} subHeading={product.title} />
-        <ProductDetailsHero
-          product={product}
-          setProduct={setProduct}
-          key={id}
-        />
+        <Title heading={product?.category} subHeading={product?.title} />
+
+        <ProductDetailsHero product={product} key={id} />
       </section>
+
       <Products
         heading={"You May Also Like"}
         subHeading={"Discover similar products handpicked just for you."}
-        allProducts={allProducts}
+        allProducts={relatedProducts}
       />
 
       <section className="custom-container section-padding">
@@ -63,6 +95,7 @@ const ProductDetails = () => {
         />
         <ProductReview product={product} />
       </section>
+
       <section className="custom-container section-padding">
         <StoreFeatures />
       </section>

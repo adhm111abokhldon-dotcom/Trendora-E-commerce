@@ -51,7 +51,9 @@ const ProductDetailsHero = ({ product, setProduct }) => {
               onClick={(e) => {
                 setCurrentImg(img);
               }}
-              className={`w-1/3 cursor-pointer ${currentImg === img ? "border border-accent" : ""} transition`}
+              className={`w-1/3 cursor-pointer
+                 ${currentImg === img ? "border border-accent" : ""}
+                  transition`}
             >
               <img
                 className="w-full h-full object-cover"
@@ -63,13 +65,15 @@ const ProductDetailsHero = ({ product, setProduct }) => {
         </div>
       </div>
       <div className="w-full md:w-1/2 flex flex-col">
-        <h2 className="text-accent font-medium text-xl text-center mb-1 md:mb-2">
+        <h2 className="text-accent font-medium text-xl 
+        text-center mb-1 md:mb-2">
           {product.title}
         </h2>
         <p className="text-xs md:text-sm mb-1 md:mb-2 text-base-text dark:text-dark-text">
           {product.description}
         </p>
-        <div className="text-base md:text-lg text-base-text dark:text-dark-text font-medium">
+        <div className="text-base md:text-lg
+         text-base-text dark:text-dark-text font-medium">
           <p>
             availability:{" "}
             <span className={`${isInStock ? "text-success" : "text-danger"}`}>

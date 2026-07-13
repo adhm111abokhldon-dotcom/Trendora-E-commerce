@@ -27,7 +27,7 @@ const CardImage = ({ path, src, alt, discount, className = "", children }) => {
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-contain p-4 group-hover:scale-105 transition"
+        className="w-full h-full object-contain p-2 md:p-4 group-hover:scale-105 transition"
       />
       <button
         className=" absolute bottom-0 right-1  hover:text-accent-hover

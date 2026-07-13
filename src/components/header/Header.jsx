@@ -1,5 +1,5 @@
+import BtmHeader from "./btmHeader/BtmHeader";
 import TopHeader from "./TopHeader";
-import BtmHeader from "./BtmHeader";
 
 const Navbar = () => {
   return (

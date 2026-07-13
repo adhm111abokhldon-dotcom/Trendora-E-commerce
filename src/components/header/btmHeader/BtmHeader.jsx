@@ -5,6 +5,8 @@ import SearchLay from "./SearchLay";
 import { AiOutlineSearch } from "react-icons/ai";
 import SideMenuNav from "./SideMenuNav";
 import { Link } from "react-router-dom";
+import { FaMoon } from "react-icons/fa";
+import { IoIosSunny } from "react-icons/io";
 
 const BtmHeader = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -29,12 +31,13 @@ const BtmHeader = () => {
   return (
     <div
       className="bg-base-bg/80 dark:bg-dark-bg backdrop-blur-md flex justify-between items-center
-     px-6 sm:px-15 max-w-7xl mx-auto h-12 sticky top-0 left-0 z-40 border-b border-border-light
+     px-6 sm:px-15 max-w-7xl mx-auto h-12 md:h-15 sticky top-0 left-0 z-40 border-b border-border-light
       dark:border-border-dark"
     >
       <div className="max-md:hidden">
         <ul
-          className="flex gap-6 h-full text-sm font-medium
+          className="flex gap-6 h-full text-base lg:text-xl 
+          font-medium
          text-base-text dark:text-dark-text"
         >
           {NavData.map((item, index) => (
@@ -56,18 +59,18 @@ const BtmHeader = () => {
         {/* Desktop Search Bar */}
         <div
           onClick={() => setIsSearchOpen(true)}
-          className="flex max-md:hidden h-9 w-48 items-center border
+          className="flex max-md:hidden h-12 w-60 items-center border
          border-border-light dark:border-border-dark hover:border-accent transition
           duration-300 rounded-full bg-base-bg dark:bg-dark-surface px-2 cursor-pointer"
         >
           <button className="text-base-text dark:text-dark-text p-1">
-            <AiOutlineSearch className="text-lg" />
+            <AiOutlineSearch className="text-2xl" />
           </button>
           <input
             type="text"
             placeholder="Search..."
-            className="bg-transparent text-xs text-base-text dark:text-dark-text focus:outline-none
-           w-full cursor-pointer"
+            className="bg-transparent  text-base-text dark:text-dark-text focus:outline-none
+           w-full text-lg cursor-pointer"
             readOnly
           />
         </div>
@@ -76,20 +79,21 @@ const BtmHeader = () => {
         <button
           onClick={() => setIsSearchOpen(true)}
           className="rounded-full md:hidden flex items-center justify-center
-         hover:bg-accent  transition h-9 w-9 text-base-text dark:text-dark-text"
+         hover:bg-accent  transition  text-base-text dark:text-dark-text"
         >
           <AiOutlineSearch className="text-xl" />
         </button>
 
         <SearchLay isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} />
         <SideMenuNav isOpen={isSideMenuOpen} setIsOpen={setIsSideMenuOpen} />
+        {/* Mood */}
         <button
+          className="rounded-full flex-center text-base-text text-lg md:text-3xl dark:text-dark-text  p-1 border border-accent"
           onClick={() =>
             theme === "light" ? setTheme("dark") : setTheme("light")
           }
-          className="flex text-base-text dark:text-dark-text"
         >
-          Swith Mode
+          {theme === "light" ? <FaMoon></FaMoon> : <IoIosSunny></IoIosSunny>}
         </button>
       </div>
     </div>
