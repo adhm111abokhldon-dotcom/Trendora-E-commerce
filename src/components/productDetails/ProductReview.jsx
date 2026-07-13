@@ -13,8 +13,6 @@ const ProductReview = ({ product }) => {
 
   return (
     <>
-     
-
       <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-6">
         {product.reviews.map((review, index) => (
           <div
@@ -31,23 +29,32 @@ const ProductReview = ({ product }) => {
                   {getProductRating(review.rating).map((star, index) => {
                     if (star === "full")
                       return (
-                        <FaStar key={index} className="text-accent text-sm" />
+                        <FaStar
+                          key={index}
+                          className="text-accent-trendora text-sm"
+                        />
                       );
                     if (star === "half")
                       return (
                         <FaStarHalfAlt
                           key={index}
-                          className="text-accent text-sm"
+                          className="text-accent-trendora text-sm"
                         />
                       );
                     return (
-                      <FaRegStar key={index} className="text-accent text-sm" />
+                      <FaRegStar
+                        key={index}
+                        className="text-accent-trendora text-sm"
+                      />
                     );
                   })}
                 </div>
               </div>
 
-              <p className="text-base-text  dark:text-dark-text font-extralight text-sm leading-relaxed italic mb-4">
+              <p
+                className="text-base-text  dark:text-dark-text font-extralight 
+              text-sm leading-relaxed italic mb-4"
+              >
                 "{review.comment}"
               </p>
             </div>

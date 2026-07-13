@@ -6,22 +6,22 @@ import Title from "../ui/Title";
 const StoreFeatures = () => {
   const features = [
     {
-      icon: <FaTruckFast className="text-2xl text-accent " />,
+      icon: <FaTruckFast className="text-2xl text-accent-trendora " />,
       title: "Fast Shipping",
       description: "Free Fast delivery for orders over $100",
     },
     {
-      icon: <IoShieldCheckmark className="text-2xl text-accent" />,
+      icon: <IoShieldCheckmark className="text-2xl text-accent-trendora" />,
       title: "Secure Payment",
       description: "100% protected payment methods",
     },
     {
-      icon: <FaArrowRotateLeft className="text-2xl text-accent" />,
+      icon: <FaArrowRotateLeft className="text-2xl text-accent-trendora" />,
       title: "Easy Returns",
       description: "14 days money-back guarantee",
     },
     {
-      icon: <FaHeadphones className="text-2xl text-accent" />,
+      icon: <FaHeadphones className="text-2xl text-accent-trendora" />,
       title: "24/7 Support",
       description: "Dedicated backup professional team",
     },
