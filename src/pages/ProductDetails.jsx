@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useWishList } from "../../context/WishlistProvider";
 import { useCart } from "../../context/CartProvider";
 import Title from "../components/ui/Title";
-import Products from "../components/ui/products";
+import Products from "../components/ui/Products";
 import StoreFeatures from "../components/productDetails/StoreFeatures";
 import { useQuery } from "@tanstack/react-query";
 import ProductDetailsHero from "../components/productDetails/ProductDetailsHero";
