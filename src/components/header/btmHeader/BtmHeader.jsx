@@ -41,7 +41,7 @@ const BtmHeader = () => {
          text-base-text dark:text-dark-text"
         >
           {NavData.map((item, index) => (
-            <li className="hover:text-accent transition">
+            <li className="hover:text-accent-trendora transition">
               <Link to={item.to}>{item.title}</Link>
             </li>
           ))}
@@ -60,7 +60,7 @@ const BtmHeader = () => {
         <div
           onClick={() => setIsSearchOpen(true)}
           className="flex max-md:hidden h-12 w-60 items-center border
-         border-border-light dark:border-border-dark hover:border-accent transition
+         border-border-light dark:border-border-dark hover:border-accent-trendora transition
           duration-300 rounded-full bg-base-bg dark:bg-dark-surface px-2 cursor-pointer"
         >
           <button className="text-base-text dark:text-dark-text p-1">
@@ -79,7 +79,7 @@ const BtmHeader = () => {
         <button
           onClick={() => setIsSearchOpen(true)}
           className="rounded-full md:hidden flex items-center justify-center
-         hover:bg-accent  transition  text-base-text dark:text-dark-text"
+         hover:bg-accent-trendora  transition  text-base-text dark:text-dark-text"
         >
           <AiOutlineSearch className="text-xl" />
         </button>
@@ -88,7 +88,8 @@ const BtmHeader = () => {
         <SideMenuNav isOpen={isSideMenuOpen} setIsOpen={setIsSideMenuOpen} />
         {/* Mood */}
         <button
-          className="rounded-full flex-center text-base-text text-lg md:text-3xl dark:text-dark-text  p-1 border border-accent"
+          className="rounded-full flex-center text-base-text text-lg md:text-3xl dark:text-dark-text 
+           p-1 border border-accent-trendora"
           onClick={() =>
             theme === "light" ? setTheme("dark") : setTheme("light")
           }

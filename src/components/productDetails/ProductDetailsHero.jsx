@@ -13,7 +13,13 @@ const ProductDetailsHero = ({ product, setProduct }) => {
   const [currentImg, setCurrentImg] = useState("");
   const [isInStock, setISInStock] = useState(true);
 
-  const { totalPrice, cartItemesCount, cartItems, cartDispatch } = useCart();
+  const {
+    handleClearCart,
+    handdleDeleteFromCart,
+    handleAddToCart,
+    cartItems,
+    cartDispatch,
+  } = useCart();
 
   const isInCart = cartItems.some((item) => item.id === product.id);
   useEffect(() => {
@@ -65,15 +71,19 @@ const ProductDetailsHero = ({ product, setProduct }) => {
         </div>
       </div>
       <div className="w-full md:w-1/2 flex flex-col">
-        <h2 className="text-accent font-medium text-xl 
-        text-center mb-1 md:mb-2">
+        <h2
+          className="text-accent-trendora font-medium text-xl 
+        text-center mb-1 md:mb-2"
+        >
           {product.title}
         </h2>
         <p className="text-xs md:text-sm mb-1 md:mb-2 text-base-text dark:text-dark-text">
           {product.description}
         </p>
-        <div className="text-base md:text-lg
-         text-base-text dark:text-dark-text font-medium">
+        <div
+          className="text-base md:text-lg
+         text-base-text dark:text-dark-text font-medium"
+        >
           <p>
             availability:{" "}
             <span className={`${isInStock ? "text-success" : "text-danger"}`}>
@@ -81,11 +91,12 @@ const ProductDetailsHero = ({ product, setProduct }) => {
             </span>
           </p>
           <p>
-            price: <span className="text-accent">${product.price}</span>
+            price:{" "}
+            <span className="text-accent-trendora">${product.price}</span>
           </p>
           <p>
-            Harry Up Only <span className="text-accent">{product.stock}</span>{" "}
-            Left
+            Harry Up Only{" "}
+            <span className="text-accent-trendora">{product.stock}</span> Left
           </p>
           <div className="flex gap-0.5 items-center">
             <span> rating: </span>
@@ -114,13 +125,11 @@ const ProductDetailsHero = ({ product, setProduct }) => {
         </div>
 
         <button
-          onClick={() =>
-            cartDispatch({ type: "ADD_TO_CART", payload: product })
-          }
+          onClick={() => handleAddToCart(product)}
           disabled={!isInStock || isInCart}
           className={`${
             isInStock ? "" : "bg-gray-400 cursor-not-allowed!"
-          } ${isInStock && !isInCart ? "bg-accent cursor-pointer active:scale-[0.97] hover:bg-accent-hover shadow-md" : "bg-success  cursor-not-allowed!"}  px-3 py-2 mt-5 text-base-text dark:text-dark-text group transition-all text-sm flex items-center gap-1
+          } ${isInStock && !isInCart ? "bg-accent-trendora cursor-pointer active:scale-[0.97] hover:bg-accent-hover shadow-md" : "bg-success  cursor-not-allowed!"}  px-3 py-2 mt-5 text-base-text dark:text-dark-text group transition-all text-sm flex items-center gap-1
            rounded-full self-center `}
         >
           {!isInStock ? (

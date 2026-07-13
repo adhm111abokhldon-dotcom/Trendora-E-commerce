@@ -11,7 +11,7 @@ export default function FeaturesMarquee() {
 
   return (
     <div
-      className="w-full h-14 md:h-16 bg-accent  text-base-text flex items-center overflow-hidden
+      className="w-full h-14 md:h-16 bg-accent-trendora  text-base-text flex items-center overflow-hidden
      whitespace-nowrap font-bold tracking-wider text-xs md:text-sm border-y border-accent-hover shadow-sm"
     >
       <div className="flex animate-marquee shrink-0 gap-16 px-8">

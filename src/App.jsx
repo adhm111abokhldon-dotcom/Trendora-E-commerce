@@ -1,43 +1,42 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import ProductDetails from "./pages/ProductDetails";
 import Header from "./components/header/Header";
 import Cart from "./pages/Cart";
 import { CartProvider } from "../context/CartProvider";
 import { Toaster } from "sonner";
-
 import ProductsByCategory from "./pages/ProductsByCategory";
 import AllCategories from "./pages/AllCategories";
 import WishlistProvider from "../context/WishlistProvider";
 import WishList from "./pages/WishList";
-import { sortByPrice } from "../utils/sorting";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ScrollToTop from "./components/ScrollToTop";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
-  const queryClient = new QueryClient();
+  const location = useLocation();
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Toaster richColors />
-        <CartProvider>
-          <WishlistProvider>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products/:id" element={<ProductDetails />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route
-                path="/categories/:category"
-                element={<ProductsByCategory />}
-              />
-              <Route path="Categories" element={<AllCategories />} />
-              <Route path="/wishList" element={<WishList />} />
-            </Routes>
-          </WishlistProvider>
-        </CartProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <AnimatePresence mode="wait">
+      <Toaster richColors position="bottom-right" />
+      <CartProvider>
+        <WishlistProvider>
+          <ScrollToTop />
+          <Header />
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/categories/:category"
+              element={<ProductsByCategory />}
+            />
+            <Route path="Categories" element={<AllCategories />} />
+            <Route path="/wishList" element={<WishList />} />
+          </Routes>
+        </WishlistProvider>
+      </CartProvider>
+    </AnimatePresence>
   );
 }
 

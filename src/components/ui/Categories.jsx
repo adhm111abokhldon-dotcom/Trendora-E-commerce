@@ -76,7 +76,7 @@ const Categories = ({ heading, allCategories = true, link }) => {
                 </h3>
 
                 <div
-                  className="flex items-center gap-1 text-xs text-accent font-semibold mt-1 opacity-90
+                  className="flex items-center gap-1 text-xs text-accent-trendora font-semibold mt-1 opacity-90
                lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 transform lg:translate-y-2 
                lg:group-hover:translate-y-0"
                 >
@@ -96,7 +96,7 @@ const Categories = ({ heading, allCategories = true, link }) => {
               <p className="text-sm text-slate-400 group-hover:text-slate-600 transition-colors">
                 Want to see more?
               </p>
-              <button className="mt-2 text-accent font-bold text-sm flex items-center gap-2 group-hover:text-accent-hover">
+              <button className="mt-2 text-accent-trendora font-bold text-sm flex items-center gap-2 group-hover:text-accent-hover">
                 View All Categories
                 <GoArrowRight className="group-hover:translate-x-1 transition-transform" />
               </button>

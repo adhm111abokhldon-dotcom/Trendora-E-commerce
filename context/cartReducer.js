@@ -10,7 +10,7 @@ export const cartReducer = (state, action) => {
       };
     }
     case "DELETE_FROM_CART": {
-      const id = action.payload;
+      const id = action.payload.id;
       return {
         ...state,
         cartItems: state.cartItems.filter((item) => item.id !== id),

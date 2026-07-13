@@ -5,13 +5,15 @@ import FeaturedCategories from "../components/FeaturedCategories";
 import Categories from "../components/ui/Categories";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import PageTransition from "../components/PageTransition";
+import CartActions from "../components/ui/CartActions";
 // import Testimonials from "../components/Testimonials";
 // import FAQ from "../components/FAQ";
 // import Newsletter from "../components/Newsletter";
 
 const Home = () => {
   return (
-    <div>
+    <PageTransition>
       <Hero />
       <FeaturedCategories />
 
@@ -23,7 +25,8 @@ const Home = () => {
       {/* <Testimonials /> */}
       {/* <FAQ /> */}
       {/* <Newsletter /> */}
-    </div>
+      <CartActions />
+    </PageTransition>
   );
 };
 

@@ -7,6 +7,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import TitleSkeleton from "../components/ui/TitleSkeleton";
 import ProductSkeleton from "../components/ui/ProductSkeleton";
+import PageTransition from "../components/PageTransition";
 
 const ProductsByCategory = () => {
   const { category } = useParams();
@@ -27,25 +28,29 @@ const ProductsByCategory = () => {
   if (error) return <p>{error.message}</p>;
   if (isLoading)
     return (
-      <section className="custom-container section-padding">
-        <TitleSkeleton />
-        <div
-          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+      <>
+        <section className="custom-container section-padding">
+          <TitleSkeleton />
+          <div
+            className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
          gap-6  "
-        >
-          {Array.from({ length: 12 }).map((_, index) => (
-            <ProductSkeleton />
-          ))}
-        </div>
-      </section>
+          >
+            {Array.from({ length: 12 }).map((_, index) => (
+              <ProductSkeleton />
+            ))}
+          </div>
+        </section>
+      </>
     );
 
   return (
-    <Products
-      heading={category}
-      subHeading={`${allProducts.products.length} products Availabil`}
-      allProducts={allProducts.products}
-    />
+    <PageTransition>
+      <Products
+        heading={category.replace("-", " ")}
+        subHeading={`${allProducts.products.length} products Availabil`}
+        allProducts={allProducts.products}
+      />
+    </PageTransition>
   );
 };
 

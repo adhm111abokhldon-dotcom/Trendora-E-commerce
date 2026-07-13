@@ -17,7 +17,7 @@ const EmptyState = ({ icon, title, desc }) => {
         <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">{desc}</p>
         <Link
           to="/"
-          className="bg-accent hover:bg-accent-hover text-white px-6 py-3 rounded-full font-medium transition flex items-center gap-2 shadow-md active:scale-95"
+          className="bg-accent-trendora hover:bg-accent-hover text-white px-6 py-3 rounded-full font-medium transition flex items-center gap-2 shadow-md active:scale-95"
         >
           <FaArrowLeft size={14} /> Continue Shopping
         </Link>

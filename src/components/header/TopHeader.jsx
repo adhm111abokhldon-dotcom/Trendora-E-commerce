@@ -24,22 +24,26 @@ const TopHeader = () => {
 
       {/* Icons */}
       <div className="flex items-center gap-4">
-        <button className="relative text-base-text dark:text-dark-text hover:text-accent transition duration-300">
+        <button className="relative text-base-text dark:text-dark-text hover:text-accent-trendora transition duration-300">
           <Link to={"/cart"}>
             <FaShoppingCart className="text-xl md:text-3xl" />
-            <span className="absolute -top-2 md:w-6 md:h-6 md:-right-3 md:-top-3 md:text-base -right-2.5 w-4 h-4 bg-accent  text-base-text dark:text-dark-text text-[10px] rounded-full flex items-center justify-center font-bold">
+            <span
+              className="absolute -top-2 md:w-6 md:h-6 md:-right-3 md:-top-3 md:text-base 
+            -right-2.5 w-4 h-4 bg-accent-trendora  text-base-text dark:text-dark-text text-[10px] 
+            rounded-full flex items-center justify-center font-bold"
+            >
               {cartItems.length}
             </span>
           </Link>
         </button>
-        <button className="relative text-base-text dark:text-dark-text hover:text-accent transition duration-300">
+        <button className="relative text-base-text dark:text-dark-text hover:text-accent-trendora transition duration-300">
           <Link className="w-full h-full" to={"wishList"}>
             {" "}
             <FaHeart className="text-xl md:text-3xl" />
           </Link>
           <span
             className="absolute -top-2 -right-2.5 w-4 h-4 md:w-6 md:h-6 md:-right-3 md:-top-3
-           bg-accent  text-base-text dark:text-dark-text text-[10px] md:text-base
+           bg-accent-trendora  text-base-text dark:text-dark-text text-[10px] md:text-base
             rounded-full flex items-center justify-center font-bold"
           >
             {wishListItemsCount}

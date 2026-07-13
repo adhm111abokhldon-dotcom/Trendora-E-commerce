@@ -10,6 +10,7 @@ import ProductReview from "../components/productDetails/ProductReview";
 import TitleSkeleton from "../components/ui/TitleSkeleton";
 import ProductSkeleton from "../components/ui/ProductSkeleton";
 import ProductDetailsHeroSkeleton from "../components/ui/ProductDetailsHeroSkeleton";
+import PageTransition from "../components/PageTransition";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -75,31 +76,33 @@ const ProductDetails = () => {
     );
 
   return (
-    <div className="bg-base-bg dark:bg-dark-surface">
-      <section className="custom-container section-padding">
-        <Title heading={product?.category} subHeading={product?.title} />
+    <PageTransition>
+      <div className="bg-base-bg dark:bg-dark-surface">
+        <section className="custom-container section-padding">
+          <Title heading={product?.category} subHeading={product?.title} />
 
-        <ProductDetailsHero product={product} key={id} />
-      </section>
+          <ProductDetailsHero product={product} key={id} />
+        </section>
 
-      <Products
-        heading={"You May Also Like"}
-        subHeading={"Discover similar products handpicked just for you."}
-        allProducts={relatedProducts}
-      />
-
-      <section className="custom-container section-padding">
-        <Title
-          heading={"Client Testimonials"}
-          subHeading={"Real reviews from people who trusted us."}
+        <Products
+          heading={"You May Also Like"}
+          subHeading={"Discover similar products handpicked just for you."}
+          allProducts={relatedProducts}
         />
-        <ProductReview product={product} />
-      </section>
 
-      <section className="custom-container section-padding">
-        <StoreFeatures />
-      </section>
-    </div>
+        <section className="custom-container section-padding">
+          <Title
+            heading={"Client Testimonials"}
+            subHeading={"Real reviews from people who trusted us."}
+          />
+          <ProductReview product={product} />
+        </section>
+
+        <section className="custom-container section-padding">
+          <StoreFeatures />
+        </section>
+      </div>
+    </PageTransition>
   );
 };
 

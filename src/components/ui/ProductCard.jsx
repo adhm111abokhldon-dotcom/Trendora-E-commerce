@@ -31,10 +31,10 @@ const CardImage = ({ path, src, alt, discount, className = "", children }) => {
       />
       <button
         className=" absolute bottom-0 right-1  hover:text-accent-hover
-         text-xs text-accent font-semibold opacity-90
+         text-xs text-accent-trendora font-semibold opacity-90
                  transition-all duration-300   "
       >
-        <Link className="w-full  gap-1 h-full flex items-center" to={path}>
+        <Link className="w-full gap-1 h-full flex items-center" to={path}>
           {" "}
           View Space <GoArrowRight className="text-sm " />
         </Link>
@@ -59,7 +59,9 @@ const CardBody = ({ price, title, brand, children }) => {
          justify-center border-gray-100
        dark:border-zinc-800"
       >
-        <p className="text-accent font-bold text-sm md:text-base ">{price}</p>
+        <p className="text-accent-trendora font-bold text-sm md:text-base ">
+          {price}
+        </p>
         {children}
       </div>
     </div>

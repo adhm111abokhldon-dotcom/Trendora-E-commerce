@@ -1,10 +1,41 @@
 import { createContext, useReducer, useContext } from "react";
 import { cartReducer, initialCartState } from "./cartReducer";
+import { toast } from "sonner";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartState, cartDispatch] = useReducer(cartReducer, initialCartState);
+
+  const handleAddToCart = (item) => {
+    toast.success("Added to Cart!", {
+      description: `${item.title} has been added succsessfully.`,
+      position: "bottom-right",
+    });
+    cartDispatch({ type: "ADD_TO_CART", payload: item });
+  };
+  const handdleDeleteFromCart = (item) => {
+    toast.info("Removed from Cart!", {
+      description: `${item.title} has been Removed from your cart`,
+      position: "bottom-right",
+      action: {
+        label: "Undo",
+        onClick: () => {
+          cartDispatch({ type: "ADD_TO_CART", payload: item });
+          toast.success("Restored to Cart");
+        },
+      },
+    });
+
+    cartDispatch({ type: "DELETE_FROM_CART", payload: item });
+  };
+  const handleClearCart = () => {
+    toast.info("Clear Cart", {
+      description: `Cart has been Cleared succsessfully.`,
+      position: "bottom-right",
+    });
+    cartDispatch({ type: "CLEAR_CART" });
+  };
 
   const cartItemsCount = cartState.cartItems.reduce(
     (total, item) => total + item.quantity,
@@ -23,12 +54,15 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
+        cartDispatch,
         isInStock,
         isInCart,
         totalPrice,
         cartItemsCount,
         cartItems: cartState.cartItems,
-        cartDispatch,
+        handleClearCart,
+        handdleDeleteFromCart,
+        handleAddToCart,
       }}
     >
       {children}

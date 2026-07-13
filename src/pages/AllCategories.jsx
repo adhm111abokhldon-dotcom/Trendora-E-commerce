@@ -3,14 +3,17 @@ import Categories from "../components/ui/Categories";
 import ProductSkeleton from "../components/ui/ProductSkeleton";
 import CategorySkeleton from "../components/ui/CategorySkeleton";
 import TitleSkeleton from "../components/ui/TitleSkeleton";
+import PageTransition from "../components/PageTransition";
 
 const AllCategories = () => {
   return (
-    <Categories
-      heading={"Categories"}
-      allCategories={true}
-      link={"/categories"}
-    />
+    <PageTransition>
+      <Categories
+        heading={"Categories"}
+        allCategories={true}
+        link={"/categories"}
+      />
+    </PageTransition>
   );
 };
 

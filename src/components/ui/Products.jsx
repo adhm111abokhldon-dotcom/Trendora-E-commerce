@@ -6,15 +6,13 @@ import { useWishList } from "../../../context/WishlistProvider";
 import { useCart } from "../../../context/CartProvider";
 
 const Products = ({ allProducts, heading, subHeading }) => {
-  const { wishListState, wishListDispatch, isInWishList } = useWishList();
   const {
-    isInStock,
-    isInCart,
-    totalPrice,
-    cartItemsCount,
-    cartItems,
-    cartDispatch,
-  } = useCart();
+    handleClearWishlist,
+    handleToggleWishlist,
+    wishListDispatch,
+    isInWishList,
+  } = useWishList();
+  const { isInStock, isInCart, handleAddToCart, cartDispatch } = useCart();
   return (
     <section className="custom-container section-padding bg-base-bg dark:bg-dark-surface">
       <Title heading={heading} subHeading={subHeading} />
@@ -32,9 +30,7 @@ const Products = ({ allProducts, heading, subHeading }) => {
                 className={`${isInWishList(item.id) ? "text-danger" : ""} absolute bg-base-bg top-1 
                 right-2 sm:right-3 p-2  backdrop-blur-sm rounded-full  
               hover:scale-110 transition z-10 shadow-sm`}
-                onClick={() =>
-                  wishListDispatch({ type: "TOGGLE_WISHLIST", payload: item })
-                }
+                onClick={() => handleToggleWishlist(item)}
               >
                 {isInWishList(item.id) ? <FaHeart /> : <FaRegHeart />}
               </button>
@@ -45,16 +41,14 @@ const Products = ({ allProducts, heading, subHeading }) => {
               title={item.title}
             >
               <button
-                onClick={() =>
-                  cartDispatch({ type: "ADD_TO_CART", payload: item })
-                }
+                onClick={() => handleAddToCart(item)}
                 disabled={!isInStock(item) || isInCart(item)}
                 className={`${
                   !isInStock(item) || isInCart(item)
                     ? "bg-gray-400 cursor-not-allowed!"
                     : isInCart(item)
                       ? "bg-success cursor-not-allowed!"
-                      : "bg-accent active:scale-[0.95] cursor-pointer hover:bg-accent-hover shadow-md"
+                      : "bg-accent-trendora active:scale-[0.95] cursor-pointer hover:bg-accent-hover shadow-md"
                 } text-white text-xs md:text-sm px-3 py-2 rounded-xl transition`}
               >
                 {!isInStock(item)

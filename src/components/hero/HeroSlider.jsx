@@ -87,7 +87,7 @@ export default function HeroSlider() {
                 )}
                 <button
                   className="mt-2 flex-center gap-2 self-start rounded-full
-               bg-accent hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold text-base-text shadow-sm
+               bg-accent-trendora hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold text-base-text shadow-sm
                 transition-all duration-300"
                 >
                   {slide.buttonText} <GoArrowUpRight />

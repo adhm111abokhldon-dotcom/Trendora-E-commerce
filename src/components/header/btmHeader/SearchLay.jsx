@@ -83,7 +83,8 @@ const SearchLay = ({ isOpen, setIsOpen }) => {
                 exit={{ x: "100%", opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 className="flex h-10 relative flex-1 sm:mx-8 max-w-xl items-center border
-                 border-border-light dark:border-border-dark focus-within:border-accent transition duration-300 rounded-full bg-base-bg dark:bg-dark-surface
+                 border-border-light dark:border-border-dark focus-within:border-accent-trendora 
+                 transition duration-300 rounded-full bg-base-bg dark:bg-dark-surface
                   px-3"
               >
                 <button className="text-base-text dark:text-dark-text mr-2">
@@ -151,10 +152,11 @@ const SearchLay = ({ isOpen, setIsOpen }) => {
 
               <button
                 onClick={() => setIsOpen(false)}
-                className=" text-base-text dark:text-dark-text hover:text-accent transition flex items-center 
+                className=" text-base-text dark:text-dark-text 
+                hover:text-accent-trendora ms-2 transition flex items-center 
                  justify-center"
               >
-                <IoClose className="text-xl" />
+                <IoClose className="text-4xl" />
               </button>
             </div>
           </motion.div>
