@@ -1,11 +1,19 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useEffect } from "react";
 import { cartReducer, initialCartState } from "./cartReducer";
 import { toast } from "sonner";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartState, cartDispatch] = useReducer(cartReducer, initialCartState);
+  const [cartState, cartDispatch] = useReducer(
+    cartReducer,
+    undefined,
+    initialCartState,
+  );
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartState));
+  }, [cartState]);
 
   const handleAddToCart = (item) => {
     toast.success("Added to Cart!", {
@@ -29,7 +37,11 @@ export const CartProvider = ({ children }) => {
 
     cartDispatch({ type: "DELETE_FROM_CART", payload: item });
   };
+  const handleLogoutCart = () => {
+    cartDispatch({ type: "CLEAR_CART" });
+  };
   const handleClearCart = () => {
+    if (cartState.cartItems.length === 0) return;
     toast.info("Clear Cart", {
       description: `Cart has been Cleared succsessfully.`,
       position: "bottom-right",
@@ -63,6 +75,7 @@ export const CartProvider = ({ children }) => {
         handleClearCart,
         handdleDeleteFromCart,
         handleAddToCart,
+        handleLogoutCart,
       }}
     >
       {children}

@@ -1,7 +1,5 @@
-import React from "react";
 import { FaTruckFast, FaArrowRotateLeft, FaHeadphones } from "react-icons/fa6";
 import { IoShieldCheckmark } from "react-icons/io5";
-import Title from "../ui/Title";
 
 const StoreFeatures = () => {
   const features = [
@@ -30,7 +28,7 @@ const StoreFeatures = () => {
   return (
     <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
       {features.map((feature, index) => (
-        <div key={index} className="flex  gap-4 items-center">
+        <div key={index} className="flex  gap-4 items-center ">
           <div
             className="flex items-center justify-center p-3 bg-white dark:bg-zinc-800 rounded-xl
            shadow-sm border border-border-light dark:border-border-dark"

@@ -1,27 +1,20 @@
-import React from "react";
-import { useWishList } from "../../context/WishlistProvider";
+import PageTransition from "@/components/PageTransition";
+import EmptyState from "@/components/ui/EmptyState";
+import ProductCard from "@/components/ui/ProductCard";
+import Title from "@/components/ui/Title";
+import { useCart } from "@/context/CartProvider";
+import { useWishList } from "@/context/WishlistProvider";
 import { FaHeart } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
-import EmptyState from "../components/ui/EmptyState";
-import { useCart } from "../../context/CartProvider";
-import Title from "../components/ui/Title";
-import ProductCard from "../components/ui/ProductCard";
-import PageTransition from "../components/PageTransition";
+
 
 const WishList = () => {
   const {
     handleToggleWishlist,
     wishListState,
-    wishListDispatch,
     wishListItemsCount,
   } = useWishList();
-  const {
-    handleClearCart,
-    handdleDeleteFromCart,
-    handleAddToCart,
-    isInCart,
-    isInStock,
-  } = useCart();
+  const { handleAddToCart, isInCart, isInStock } = useCart();
 
   return (
     <PageTransition>

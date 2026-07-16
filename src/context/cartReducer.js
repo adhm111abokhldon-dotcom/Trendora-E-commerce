@@ -1,4 +1,11 @@
-export const initialCartState = { cartItems: [] };
+export const initialCartState = () => {
+  try {
+    const saved = localStorage.getItem("cart");
+    return saved ? JSON.parse(saved) : { cartItems: [] };
+  } catch {
+    return { cartItems: [] };
+  }
+};
 
 export const cartReducer = (state, action) => {
   switch (action.type) {

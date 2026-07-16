@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -122,7 +122,7 @@ const SearchLay = ({ isOpen, setIsOpen }) => {
                     {products.map((item) => (
                       <li
                         key={item.id}
-                        className="px-4 gap-2 flex py-3 hover:text-accent dark:hover:bg-border-dark
+                        className="px-4 gap-2 flex py-3 hover:text-accent-trendora dark:hover:bg-border-dark
                         transition text-sm text-base-text dark:text-dark-text"
                       >
                         <img

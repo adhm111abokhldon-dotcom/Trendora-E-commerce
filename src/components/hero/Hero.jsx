@@ -1,5 +1,3 @@
-import React from "react";
-import { FiArrowRight } from "react-icons/fi";
 import HeroSlider from "./HeroSlider";
 import Title from "../ui/Title";
 import FeaturesMarquee from "../FeaturesMarquee";

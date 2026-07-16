@@ -1,4 +1,3 @@
-import React from "react";
 import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -32,14 +31,14 @@ const SideMenuNav = ({ isOpen, setIsOpen }) => {
             onClick={() => setIsOpen(false)}
             className="cursor-pointer text-base-text
              dark:text-dark-text
-             hover:text-accent transition"
+             hover:text-accent-trendora transition"
           />
         </li>
         {menuData.map((item, index) => (
           <li
             className="w-full cursor-pointer border-b font-medium border-border-light
              dark:border-border-dark  px-5 py-4
-             text-base-text hover:text-accent dark:text-dark-text bg-base-bg
+             text-base-text hover:text-accent-trendora dark:text-dark-text bg-base-bg
              hover:bg-slate-100
              dark:bg-dark-surface dark:hover:bg-border-dark"
             key={index}

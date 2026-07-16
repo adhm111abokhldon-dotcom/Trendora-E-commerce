@@ -40,7 +40,7 @@ export default function HeroSlider() {
 
   return (
     <div
-      className="custom-container aspect-square md:aspect-auto md:h-80 lg:h-90
+      className="custom-container aspect-square h-80 w-full md:aspect-auto md:h-90 lg:h-100
       overflow-hidden"
     >
       <Swiper
@@ -53,7 +53,7 @@ export default function HeroSlider() {
         className="w-full h-full"
       >
         {ImagesData.map((slide, index) => (
-          <SwiperSlide className="size-full">
+          <SwiperSlide className="size-full" key={index}>
             <div className="size-full rounded-2xl relative">
               <div className="bg-black/50 absolute top-0 rounded-2xl left-0 w-full h-full z-20"></div>
               {slide.type === "image" ? (

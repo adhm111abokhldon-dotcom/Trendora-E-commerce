@@ -1,9 +1,7 @@
-import React from "react";
-import Title from "../ui/Title";
-import getProductRating from "../../../utils/getProductRating";
 import { FaRegStar } from "react-icons/fa6";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import getProductRating from "@/utils/getProductRating";
 
 const ProductReview = ({ product }) => {
   if (!product || !product.reviews)

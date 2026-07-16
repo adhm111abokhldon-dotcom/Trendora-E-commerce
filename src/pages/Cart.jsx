@@ -1,25 +1,17 @@
-import {
-  FaArrowLeft,
-  FaMinus,
-  FaPlus,
-  FaShoppingCart,
-  FaTrash,
-} from "react-icons/fa";
-import CartContext from "../../context/CartProvider";
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { useCart } from "../../context/CartProvider";
-import EmptyState from "../components/ui/EmptyState";
-import Title from "../components/ui/Title";
-import PageTransition from "../components/PageTransition";
+import PageTransition from "@/components/PageTransition";
+import EmptyState from "@/components/ui/EmptyState";
+import Title from "@/components/ui/Title";
+import { useCart } from "@/context/CartProvider";
+import { FaMinus, FaPlus, FaShoppingCart, FaTrash } from "react-icons/fa";
+
+import { toast } from "sonner";
 
 const Cart = () => {
   const {
     totalPrice,
-    cartItemesCount,
-    handleClearCart,
+
     handdleDeleteFromCart,
-    handleAddToCart,
+
     cartItems,
     cartDispatch,
   } = useCart();
@@ -50,6 +42,7 @@ const Cart = () => {
           <div className="flex lg:col-span-2 max-h-100 overflow-y-auto p-2 bg-transparent flex-col gap-5">
             {cartItems.map((item) => (
               <div
+                key={item.id}
                 className=" flex flex-col rounded-4xl border shadow-sm border-border-light dark:border-border-dark
             sm:flex-row sm:items-center p-4 sm:justify-between bg-base-bg dark:bg-slate-900 gap-2"
               >
@@ -71,7 +64,7 @@ const Cart = () => {
                     <h2 className="text-base-text mt-1 mb-2 line-clamp-1 dark:text-dark-text text-sm">
                       {item.title}
                     </h2>
-                    <span className="text-accent">${item.price}</span>
+                    <span className="text-accent-trendora">${item.price}</span>
                   </div>
                 </div>
                 {/* Rigth Side */}

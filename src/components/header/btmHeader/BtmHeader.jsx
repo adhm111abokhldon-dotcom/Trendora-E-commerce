@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { MdMenu as MenuIcon } from "react-icons/md";
 import SearchLay from "./SearchLay";
@@ -8,26 +8,15 @@ import { Link } from "react-router-dom";
 import { FaMoon } from "react-icons/fa";
 import { IoIosSunny } from "react-icons/io";
 
-const BtmHeader = () => {
+const BtmHeader = ({ theme, setTheme }) => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [theme, setTheme] = useState("light");
   const NavData = [
     { to: "/", title: "Home" },
     { to: "/categories", title: "Categories" },
     { to: "/contact-us", title: "Contact Us" },
     { to: "/shop", title: "Shop All" },
   ];
-  useEffect(() => {
-    if (theme === "light") {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-      document.documentElement.classList.add("dark");
-    }
-  }, [theme]);
-
   return (
     <div
       className="bg-base-bg/80 dark:bg-dark-bg backdrop-blur-md flex justify-between items-center
@@ -41,7 +30,7 @@ const BtmHeader = () => {
          text-base-text dark:text-dark-text"
         >
           {NavData.map((item, index) => (
-            <li className="hover:text-accent-trendora transition">
+            <li key={index} className="hover:text-accent-trendora transition">
               <Link to={item.to}>{item.title}</Link>
             </li>
           ))}
@@ -50,7 +39,7 @@ const BtmHeader = () => {
 
       <button
         onClick={() => setIsSideMenuOpen(true)}
-        className="md:hidden hover:text-accent text-base-text dark:text-dark-text text-2xl"
+        className="md:hidden hover:text-accent-trendora text-base-text dark:text-dark-text text-2xl"
       >
         <MenuIcon />
       </button>
@@ -89,7 +78,7 @@ const BtmHeader = () => {
         {/* Mood */}
         <button
           className="rounded-full flex-center text-base-text text-lg md:text-3xl dark:text-dark-text 
-           p-1 border border-accent-trendora"
+           p-1 border border-border-light dark:border-border-dark"
           onClick={() =>
             theme === "light" ? setTheme("dark") : setTheme("light")
           }

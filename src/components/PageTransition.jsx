@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import React from "react";
 import { useLocation } from "react-router-dom";
 
 const PageTransition = ({ children }) => {

@@ -1,11 +1,11 @@
 import BtmHeader from "./btmHeader/BtmHeader";
 import TopHeader from "./TopHeader";
 
-const Navbar = () => {
+const Navbar = ({ theme, setTheme }) => {
   return (
     <>
       <TopHeader />
-      <BtmHeader />
+      <BtmHeader theme={theme} setTheme={setTheme} />
     </>
   );
 };

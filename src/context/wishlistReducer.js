@@ -1,4 +1,11 @@
-export const initialWhishListItems = [];
+export const initialWhishListItems = () => {
+  try {
+    const saved = localStorage.getItem("wishList");
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
 
 export const wishListReducer = (state, action) => {
   switch (action.type) {

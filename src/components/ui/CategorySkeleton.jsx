@@ -1,5 +1,3 @@
-import React from "react";
-
 const CategorySkeleton = () => {
   return (
     <div className="h-48 animate-pulse rounded-2xl relative">

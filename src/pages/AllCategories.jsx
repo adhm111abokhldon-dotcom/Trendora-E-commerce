@@ -1,9 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import Categories from "../components/ui/Categories";
-import ProductSkeleton from "../components/ui/ProductSkeleton";
-import CategorySkeleton from "../components/ui/CategorySkeleton";
-import TitleSkeleton from "../components/ui/TitleSkeleton";
-import PageTransition from "../components/PageTransition";
+import PageTransition from "@/components/PageTransition";
+import Categories from "@/components/ui/Categories";
+
 
 const AllCategories = () => {
   return (

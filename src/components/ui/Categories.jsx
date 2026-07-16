@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Title from "./Title";
 import { GoArrowRight } from "react-icons/go";
 import { Link } from "react-router-dom";
+
+import { useQuery } from "@tanstack/react-query";
 import TitleSkeleton from "./TitleSkeleton";
 import CategorySkeleton from "./CategorySkeleton";
-import { useQuery } from "@tanstack/react-query";
+import Title from "./Title";
 
 const Categories = ({ heading, allCategories = true, link }) => {
   const fetchCategories = async () => {
@@ -19,12 +19,11 @@ const Categories = ({ heading, allCategories = true, link }) => {
     isLoading,
     error,
   } = useQuery({ queryKey: ["categories"], queryFn: fetchCategories });
-
   if (error) return <p>{error.message}</p>;
   if (isLoading) {
     return (
       <section className="custom-container section-padding bg-base-bg dark:bg-dark-surface">
-        <TitleSkeleton />
+        <TitleSkeleton showSubHeading={allCategories} />
         <div
           className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
          gap-6  "
@@ -36,6 +35,7 @@ const Categories = ({ heading, allCategories = true, link }) => {
       </section>
     );
   }
+
   const displayedCategories = allCategories
     ? categories
     : categories.slice(0, 8);
@@ -47,7 +47,7 @@ const Categories = ({ heading, allCategories = true, link }) => {
     >
       <Title
         heading={heading}
-        subHeading={`${displayedCategories.length} Categories `}
+        subHeading={`${allCategories ? `${displayedCategories.length} Categories ` : ""} `}
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -74,7 +74,6 @@ const Categories = ({ heading, allCategories = true, link }) => {
                 <h3 className="text-base font-bold capitalize tracking-wide text-dark-text ">
                   {category.replace("-", " ")}
                 </h3>
-
                 <div
                   className="flex items-center gap-1 text-xs text-accent-trendora font-semibold mt-1 opacity-90
                lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 transform lg:translate-y-2 

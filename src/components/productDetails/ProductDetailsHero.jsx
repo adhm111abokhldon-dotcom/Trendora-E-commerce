@@ -1,25 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
-import Title from "../ui/Title";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa6";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
-import getProductRating from "../../../utils/getProductRating";
-import { useCart } from "../../../context/CartProvider";
-import { FaCheckCircle } from "react-icons/fa";
 
-const ProductDetailsHero = ({ product, setProduct }) => {
+import { FaCheckCircle } from "react-icons/fa";
+import { useCart } from "@/context/CartProvider";
+import getProductRating from "@/utils/getProductRating";
+
+const ProductDetailsHero = ({ product }) => {
   const [currentImg, setCurrentImg] = useState("");
   const [isInStock, setISInStock] = useState(true);
 
-  const {
-    handleClearCart,
-    handdleDeleteFromCart,
-    handleAddToCart,
-    cartItems,
-    cartDispatch,
-  } = useCart();
+  const { handleAddToCart, cartItems } = useCart();
 
   const isInCart = cartItems.some((item) => item.id === product.id);
   useEffect(() => {
@@ -54,11 +48,11 @@ const ProductDetailsHero = ({ product, setProduct }) => {
           {product.images.map((img, index) => (
             <div
               key={index}
-              onClick={(e) => {
+              onClick={() => {
                 setCurrentImg(img);
               }}
               className={`w-1/3 cursor-pointer
-                 ${currentImg === img ? "border border-accent" : ""}
+                 ${currentImg === img ? "border border-accent-trendora" : ""}
                   transition`}
             >
               <img
@@ -104,19 +98,19 @@ const ProductDetailsHero = ({ product, setProduct }) => {
               if (star === "full") {
                 return (
                   <span key={index}>
-                    <FaStar className="fill-accent" />
+                    <FaStar className="fill-accent-trendora" />
                   </span>
                 );
               } else if (star === "half") {
                 return (
                   <span key={index}>
-                    <FaStarHalfAlt className="fill-accent" />
+                    <FaStarHalfAlt className="fill-accent-trendora" />
                   </span>
                 );
               } else {
                 return (
                   <span key={index}>
-                    <FaRegStar className="fill-accent" />
+                    <FaRegStar className="fill-accent-trendora" />
                   </span>
                 );
               }

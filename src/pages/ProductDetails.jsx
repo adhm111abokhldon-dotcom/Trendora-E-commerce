@@ -1,22 +1,17 @@
-import { useParams } from "react-router-dom";
-import { useWishList } from "../../context/WishlistProvider";
-import { useCart } from "../../context/CartProvider";
-import Title from "../components/ui/Title";
-import Products from "../components/ui/Products";
-import StoreFeatures from "../components/productDetails/StoreFeatures";
+import PageTransition from "@/components/PageTransition";
+import ProductDetailsHero from "@/components/productDetails/ProductDetailsHero";
+import ProductReview from "@/components/productDetails/ProductReview";
+import StoreFeatures from "@/components/productDetails/StoreFeatures";
+import ProductDetailsHeroSkeleton from "@/components/ui/ProductDetailsHeroSkeleton";
+import Products from "@/components/ui/Products";
+import ProductSkeleton from "@/components/ui/ProductSkeleton";
+import Title from "@/components/ui/Title";
+import TitleSkeleton from "@/components/ui/TitleSkeleton";
 import { useQuery } from "@tanstack/react-query";
-import ProductDetailsHero from "../components/productDetails/ProductDetailsHero";
-import ProductReview from "../components/productDetails/ProductReview";
-import TitleSkeleton from "../components/ui/TitleSkeleton";
-import ProductSkeleton from "../components/ui/ProductSkeleton";
-import ProductDetailsHeroSkeleton from "../components/ui/ProductDetailsHeroSkeleton";
-import PageTransition from "../components/PageTransition";
+import { useParams } from "react-router-dom";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const { wishListState, wishListDispatch, isInWishList } = useWishList();
-  const { cartDispatch } = useCart();
-
   const fetchProduct = async () => {
     const res = await fetch(`https://dummyjson.com/products/${id}`);
     if (!res.ok) throw new Error("Failed to fetch Product");
@@ -42,7 +37,7 @@ const ProductDetails = () => {
   };
 
   const {
-    data: relatedProducts = [],
+    data: products,
     isLoading: isRelatedLoading,
     error: relatedError,
   } = useQuery({
@@ -52,8 +47,7 @@ const ProductDetails = () => {
   });
   if (productError) return <p>{productError.message}</p>;
   if (relatedError) return <p>{relatedError.message}</p>;
-
-  if (isRelatedLoading || isProductLoading)
+  if (isRelatedLoading || isProductLoading) {
     return (
       <>
         <section className="custom-container section-padding">
@@ -68,18 +62,22 @@ const ProductDetails = () => {
          gap-6  "
           >
             {Array.from({ length: 6 }).map((_, index) => (
-              <ProductSkeleton />
+              <ProductSkeleton key={index} />
             ))}
           </div>
         </section>
       </>
     );
-
+  }
+  const relatedProducts = products.slice(0, 5);
   return (
     <PageTransition>
       <div className="bg-base-bg dark:bg-dark-surface">
         <section className="custom-container section-padding">
-          <Title heading={product?.category} subHeading={product?.title} />
+          <Title
+            heading={product?.category.replace("-", " ")}
+            subHeading={product?.title.replace("-", " ")}
+          />
 
           <ProductDetailsHero product={product} key={id} />
         </section>
@@ -89,17 +87,15 @@ const ProductDetails = () => {
           subHeading={"Discover similar products handpicked just for you."}
           allProducts={relatedProducts}
         />
-
+        <section className="custom-container section-padding">
+          <StoreFeatures />
+        </section>
         <section className="custom-container section-padding">
           <Title
             heading={"Client Testimonials"}
             subHeading={"Real reviews from people who trusted us."}
           />
           <ProductReview product={product} />
-        </section>
-
-        <section className="custom-container section-padding">
-          <StoreFeatures />
         </section>
       </div>
     </PageTransition>

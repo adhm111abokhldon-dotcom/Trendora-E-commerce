@@ -1,4 +1,3 @@
-import React from "react";
 import { FiTruck, FiShield, FiRefreshCw, FiPhoneCall } from "react-icons/fi";
 
 export default function FeaturesMarquee() {

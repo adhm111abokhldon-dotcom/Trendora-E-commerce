@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Title from "../components/ui/Title";
-import Products from "../components/ui/Products";
-import { useParams } from "react-router-dom";
-import ProductCard from "../components/ui/ProductCard";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import PageTransition from "@/components/PageTransition";
+import Products from "@/components/ui/Products";
+import ProductSkeleton from "@/components/ui/ProductSkeleton";
+import TitleSkeleton from "@/components/ui/TitleSkeleton";
 import { useQuery } from "@tanstack/react-query";
-import TitleSkeleton from "../components/ui/TitleSkeleton";
-import ProductSkeleton from "../components/ui/ProductSkeleton";
-import PageTransition from "../components/PageTransition";
+import { useParams } from "react-router-dom";
+
 
 const ProductsByCategory = () => {
   const { category } = useParams();
@@ -36,7 +33,7 @@ const ProductsByCategory = () => {
          gap-6  "
           >
             {Array.from({ length: 12 }).map((_, index) => (
-              <ProductSkeleton />
+              <ProductSkeleton key={index}/>
             ))}
           </div>
         </section>

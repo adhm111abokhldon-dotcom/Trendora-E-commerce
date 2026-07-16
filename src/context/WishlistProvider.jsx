@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { initialWhishListItems, wishListReducer } from "./wishlistReducer";
 import { toast } from "sonner";
 
@@ -7,8 +7,13 @@ const WishListContext = createContext();
 const WishlistProvider = ({ children }) => {
   const [wishListState, wishListDispatch] = useReducer(
     wishListReducer,
+    undefined,
     initialWhishListItems,
   );
+
+  useEffect(() => {
+    localStorage.setItem("wishList", JSON.stringify(wishListState));
+  }, [wishListState]);
   const wishListItemsCount = wishListState.length;
   const isInWishList = (id) => wishListState.some((item) => item.id === id);
 
@@ -27,7 +32,11 @@ const WishlistProvider = ({ children }) => {
       wishListDispatch({ type: "TOGGLE_WISHLIST", payload: item });
     }
   };
+  const handleLogoutWishList = () => {
+    wishListDispatch({ type: "CLEAR_WISHLIST" });
+  };
   const handleClearWishlist = () => {
+    if (wishListItemsCount === 0) return;
     toast.info("Clear Wishlist", {
       description: `Wishlist has been Cleared succsessfully.`,
       position: "bottom-right",
@@ -44,6 +53,7 @@ const WishlistProvider = ({ children }) => {
         wishListDispatch,
         wishListItemsCount,
         isInWishList,
+        handleLogoutWishList,
       }}
     >
       {children}

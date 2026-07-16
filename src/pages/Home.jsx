@@ -1,15 +1,9 @@
-// import BestSellers from "../components/BestSellers";
-import Hero from "../components/hero/Hero";
-import FeaturedCategories from "../components/FeaturedCategories";
-// import SmartProductGrid from "../components/SmartProductGrid";
-import Categories from "../components/ui/Categories";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import PageTransition from "../components/PageTransition";
-// import CartActions from "../components/ui/CartActions";
-// import Testimonials from "../components/Testimonials";
-// import FAQ from "../components/FAQ";
-// import Newsletter from "../components/Newsletter";
+import FAQ from "@/components/FAQ";
+import FeaturedCategories from "@/components/FeaturedCategories";
+
+import Hero from "@/components/hero/Hero";
+import PageTransition from "@/components/PageTransition";
+import Categories from "@/components/ui/Categories";
 
 const Home = () => {
   return (
@@ -22,10 +16,7 @@ const Home = () => {
         allCategories={false}
         link={"categories"}
       />
-      {/* <Testimonials /> */}
-      {/* <FAQ /> */}
-      {/* <Newsletter /> */}
-      {/* <CartActions /> */}
+      <FAQ />
     </PageTransition>
   );
 };

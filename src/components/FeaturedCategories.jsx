@@ -1,6 +1,5 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import Title from "./ui/Title";
-import { GoArrowUpRight } from "react-icons/go";
 
 export default function FeaturedCategories() {
   const categories = [
@@ -10,6 +9,7 @@ export default function FeaturedCategories() {
       subtitle: "What Everyone Is Buying",
       count: "Top Rated Items",
       image: "/best-image.jpg",
+      url: "/customCategory/best-sellers",
     },
     {
       id: 2,
@@ -17,6 +17,7 @@ export default function FeaturedCategories() {
       subtitle: "Viral & Urban Styles",
       count: "Going Fast 🔥",
       image: "/trend-image.jpg",
+      url: "/customCategory/trending",
     },
     {
       id: 3,
@@ -24,6 +25,7 @@ export default function FeaturedCategories() {
       subtitle: "Exclusive Limited Deals",
       count: "Up to 40% OFF",
       image: "/hotDrop-image.jpg",
+      url: "/customCategory/hot-drops",
     },
     {
       id: 4,
@@ -31,6 +33,7 @@ export default function FeaturedCategories() {
       subtitle: "Fresh Off The Design Lab",
       count: "Just Landed",
       image: "/new-image.jpg",
+      url: "/customCategory/new-arrivals",
     },
   ];
 
@@ -52,7 +55,7 @@ export default function FeaturedCategories() {
                 <span className="text-base-text-muted text-xs font-semibold">
                   {cat.count}
                 </span>
-                <h3 className="text-xl md:text-2xl font-black mt-1 text-accent transition-colors duration-300">
+                <h3 className="text-xl md:text-2xl font-black mt-1 text-accent-trendora transition-colors duration-300">
                   {cat.title}
                 </h3>
                 <div className="mt-4">
@@ -61,7 +64,10 @@ export default function FeaturedCategories() {
                      border border-slate-700 group-hover:bg-white
                    group-hover:text-slate-950 transition-all duration-300 active:scale-95"
                   >
-                    View Space
+                    <Link className="w-full h-full" to={cat.url}>
+                      {" "}
+                      View Space
+                    </Link>
                   </button>
                 </div>
               </div>

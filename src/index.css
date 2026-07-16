@@ -70,7 +70,7 @@
   box-sizing: border-box;
 }
 body {
-  @apply bg-base-bg text-base-text font-body overflow-x-hidden;
+  @apply bg-base-bg dark:bg-dark-surface text-base-text font-body overflow-x-hidden;
 }
 html,
 body {
@@ -224,11 +224,5 @@ a {
 @layer base {
   * {
     @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
   }
 }
