@@ -15,7 +15,7 @@ const ProductCard = ({ children }) => {
 const CardImage = ({ path, src, alt, discount, className = "", children }) => {
   return (
     <div
-      className={`relative bg-gray-50 dark:bg-slate-900 overflow-hidden shrink-0 ${className}`}
+      className={`relative bg-gray-50 dark:bg-dark-bg overflow-hidden shrink-0 ${className}`}
     >
       {discount && (
         <div className="absolute top-2 left-3 text-base-text-faint text-[10px] md:text-xs bg-danger font-semibold px-2 py-1 rounded-xl z-10">
@@ -28,23 +28,21 @@ const CardImage = ({ path, src, alt, discount, className = "", children }) => {
         alt={alt}
         className="w-full h-full object-contain p-2 md:p-4 group-hover:scale-105 transition"
       />
-      <button
-        className=" absolute bottom-0 right-1  hover:text-accent-hover
+      <Link
+        to={path}
+        className=" absolute bottom-0 right-1  gap-1  flex items-center hover:text-accent-hover
          text-xs text-accent-trendora font-semibold opacity-90
                  transition-all duration-300   "
       >
-        <Link className="w-full gap-1 h-full flex items-center" to={path}>
-          {" "}
-          View Space <GoArrowRight className="text-sm " />
-        </Link>
-      </button>
+        View Space <GoArrowRight className="text-sm " />
+      </Link>
     </div>
   );
 };
 
 const CardBody = ({ price, title, brand, children }) => {
   return (
-    <div className="flex flex-col flex-1 p-1 sm:p-2 md:p-4 bg-gray-200 dark:bg-dark-bg">
+    <div className="flex flex-col flex-1 p-1 sm:p-2 md:p-4 bg-gray-200 dark:bg-dark-surface">
       <div className=" mb-1 sm:mb-2 md:mb-4 flex-1">
         <span className="text-base-text-faint block mb-1 truncate text[10px] md:text-xs">
           {brand}

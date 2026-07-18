@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const loginShemas = z.object({
+export const loginSchemas = z.object({
   username: z.string().refine((val) => val === "emilys", {
     message: 'username must be "emilys"',
   }),

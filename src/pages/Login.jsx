@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input";
 import PageTransition from "../components/PageTransition";
 import { useAuth } from "@/context/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginShemas } from "@/schemas/loginShemas";
+import { loginSchemas } from "@/schemas/loginSchemas";
 import { Button } from "@base-ui/react";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
+import { toast } from "sonner";
 
 const loginRequest = async ({ username, password }) => {
   const res = await fetch("https://dummyjson.com/auth/login", {
@@ -41,7 +42,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
-    resolver: zodResolver(loginShemas),
+    resolver: zodResolver(loginSchemas),
     mode: "onBlur",
     defaultValues: {
       username: "",
@@ -71,7 +72,7 @@ const Login = () => {
       }, 1500);
     },
     onError: (error) => {
-      console.error(error.message);
+      toast.error(error.message || "Invalid username or password");
     },
   });
 
@@ -81,8 +82,14 @@ const Login = () => {
         <div
           className="w-full max-w-md bg-base-surface
          dark:bg-dark-surface p-8 rounded-xl shadow-sm border border-border-light
-          dark:border-border-dark "
+          dark:border-border-dark relative"
         >
+          <Link
+            to={"/"}
+            className="absolute top-5 right-4 text-danger hover:text-danger-hover transition-colors"
+          >
+            <X className=" size-10 " />
+          </Link>
           <div className="text-center mb-8">
             <h2 className="text-3xl font-extrabold text-base-text dark:text-dark-text tracking-tight mb-2">
               Welcome Back
@@ -176,7 +183,7 @@ const Login = () => {
 
               <Button
                 type="submit"
-                disabled={loginMutation.isPending}
+                disabled={loginMutation.isPending || loginMutation.isSuccess}
                 className="w-full h-11 mt-2 bg-accent-trendora hover:bg-accent-hover
                  text-stone-900 font-bold rounded-lg shadow-sm transition-all duration-200
                   flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"

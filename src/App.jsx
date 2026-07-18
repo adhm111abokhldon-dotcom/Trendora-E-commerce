@@ -1,5 +1,7 @@
+import { lazy, Suspense } from "react";
+
 import { AnimatePresence } from "framer-motion";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import CartProvider from "./context/CartProvider";
 import WishlistProvider from "./context/WishlistProvider";
@@ -20,6 +22,16 @@ import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomCategory from "./pages/CustomCategory";
 
+const MainLayout = ({ theme, setTheme }) => {
+  return (
+    <>
+      <Header theme={theme} setTheme={setTheme} />
+      <Outlet />
+      <Footer />
+    </>
+  );
+};
+
 function App() {
   const location = useLocation();
   const [theme, setTheme] = useState(getInitialTheme);
@@ -34,51 +46,58 @@ function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
   return (
-    <AnimatePresence mode="wait">
+    <>
       <Toaster richColors position="bottom-right" />
 
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
             <ScrollToTop />
-            <Header theme={theme} setTheme={setTheme} />
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/products/:id" element={<ProductDetails />} />
-              <Route
-                path="/categories/:category"
-                element={<ProductsByCategory />}
-              />
-              <Route path="/categories" element={<AllCategories />} />
-              <Route
-                path="/customCategory/:categoryName"
-                element={<CustomCategory />}
-              />
 
-              {/* Protected Routes */}
-              <Route
-                path="/cart"
-                element={
-                  <ProtectedRoute>
-                    <Cart />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/wishList"
-                element={
-                  <ProtectedRoute>
-                    <WishList />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-            <Footer />
+            {/* Routes */}
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                <Route
+                  element={<MainLayout theme={theme} setTheme={setTheme} />}
+                >
+                  <Route path="/" element={<Home />} />
+
+                  <Route path="/products/:id" element={<ProductDetails />} />
+                  <Route
+                    path="/categories/:category"
+                    element={<ProductsByCategory />}
+                  />
+                  <Route path="/categories" element={<AllCategories />} />
+                  <Route
+                    path="/customCategory/:categoryName"
+                    element={<CustomCategory />}
+                  />
+
+                  {/* Protected Routes */}
+                  <Route
+                    path="/cart"
+                    element={
+                      <ProtectedRoute>
+                        <Cart />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/wishList"
+                    element={
+                      <ProtectedRoute>
+                        <WishList />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Route>
+                <Route path="/login" element={<Login />} />
+              </Routes>
+            </AnimatePresence>
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>
-    </AnimatePresence>
+    </>
   );
 }
 

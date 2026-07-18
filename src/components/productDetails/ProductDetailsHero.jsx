@@ -11,7 +11,6 @@ import getProductRating from "@/utils/getProductRating";
 
 const ProductDetailsHero = ({ product }) => {
   const [currentImg, setCurrentImg] = useState("");
-  const [isInStock, setISInStock] = useState(true);
 
   const { handleAddToCart, cartItems } = useCart();
 
@@ -22,13 +21,7 @@ const ProductDetailsHero = ({ product }) => {
     }
   }, [product.images]);
 
-  useEffect(() => {
-    if (product && product.availabilityStatus) {
-      product.availabilityStatus === "In Stock"
-        ? setISInStock(true)
-        : setISInStock(false);
-    }
-  }, [product.availabilityStatus]);
+  const isInStock = product.availabilityStatus === "In Stock";
 
   if (!product || !product.images) return <div>Loading..</div>;
 

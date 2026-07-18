@@ -14,7 +14,7 @@ const PageTransition = ({ children }) => {
       variants={variants}
       initial="initial"
       animate="animate"
-      transition="transition"
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {children}
     </motion.div>

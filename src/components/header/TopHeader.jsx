@@ -19,10 +19,9 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 const TopHeader = () => {
-  const { cartItems, handleLogoutCart } = useCart();
+  const { cartItems, handleLogoutCart, cartItemsCount } = useCart();
   const { wishListItemsCount, handleLogoutWishList } = useWishList();
   const { authState, hanldleLogOut } = useAuth();
 
@@ -48,6 +47,9 @@ const TopHeader = () => {
     });
   };
 
+
+  
+
   return (
     <div
       className="flex justify-between items-center custom-container dark:bg-dark-bg
@@ -65,7 +67,6 @@ const TopHeader = () => {
           Trendora
         </h2>
       </div>
-
       {/* Icons */}
       <div className="flex items-center gap-4">
         {/* Auth */}
@@ -150,7 +151,7 @@ const TopHeader = () => {
                     text-[10px] rounded-full flex items-center justify-center
                     font-bold"
                   >
-                    {cartItems.length}
+                    {cartItemsCount}
                   </span>
                 </button>
               </AlertDialogTrigger>
@@ -160,8 +161,8 @@ const TopHeader = () => {
                   <AlertDialogTitle>Access Denied</AlertDialogTitle>
 
                   <AlertDialogDescription>
-                    You Need to Logged in to View your Cart Would you like to
-                    log in now?
+                    You need to Log in to View your Cart Would you like to log
+                    in now?
                   </AlertDialogDescription>
                 </AlertDialogHeader>
 

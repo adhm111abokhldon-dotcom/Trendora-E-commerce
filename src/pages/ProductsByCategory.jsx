@@ -5,7 +5,6 @@ import TitleSkeleton from "@/components/ui/TitleSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-
 const ProductsByCategory = () => {
   const { category } = useParams();
 
@@ -20,7 +19,7 @@ const ProductsByCategory = () => {
     data: allProducts,
     isLoading,
     error,
-  } = useQuery({ queryKey: ["allProducts"], queryFn: fetchProducts });
+  } = useQuery({ queryKey: ["allProducts", category], queryFn: fetchProducts });
   console.log(allProducts);
   if (error) return <p>{error.message}</p>;
   if (isLoading)
@@ -33,7 +32,7 @@ const ProductsByCategory = () => {
          gap-6  "
           >
             {Array.from({ length: 12 }).map((_, index) => (
-              <ProductSkeleton key={index}/>
+              <ProductSkeleton key={index} />
             ))}
           </div>
         </section>
@@ -43,8 +42,8 @@ const ProductsByCategory = () => {
   return (
     <PageTransition>
       <Products
-        heading={category.replace("-", " ")}
-        subHeading={`${allProducts.products.length} products Availabil`}
+        heading={category.replaceAll("-", " ")}
+        subHeading={`${allProducts.products.length} products Available`}
         allProducts={allProducts.products}
       />
     </PageTransition>

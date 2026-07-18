@@ -17,6 +17,14 @@ const SearchLay = ({ isOpen, setIsOpen }) => {
   };
 
   useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     if (!input.trim()) {
       setProducts([]);
       setIsLoading(false);
@@ -65,7 +73,7 @@ const SearchLay = ({ isOpen, setIsOpen }) => {
             animate="animate"
             exit="exit"
             transition={{ duration: 0.2 }}
-            className="fixed shadow-2xl px-6 z-50 top-0 left-0 w-full h-auto
+            className="fixed shadow-2xl overflow-visible px-6 z-50 top-0 left-0 w-full h-auto
              min-h-[40vh] bg-base-bg dark:bg-dark-bg border-b border-border-light dark:border-border-dark pb-8"
           >
             <div className="flex pt-4 w-full justify-between items-center max-w-7xl mx-auto">

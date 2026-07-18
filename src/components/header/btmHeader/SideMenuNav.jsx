@@ -2,13 +2,7 @@ import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-const SideMenuNav = ({ isOpen, setIsOpen }) => {
-  const menuData = [
-    { to: "/", title: "Home" },
-    { to: "/categories", title: "Categories" },
-    { to: "/contact-us", title: "Contact Us" },
-    { to: "/shop", title: "Shop All" },
-  ];
+const SideMenuNav = ({ isOpen, setIsOpen, menuData }) => {
   return createPortal(
     <>
       {/* Overlay behind side menu */}

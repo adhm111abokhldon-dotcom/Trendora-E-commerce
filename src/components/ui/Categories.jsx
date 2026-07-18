@@ -1,6 +1,5 @@
 import { GoArrowRight } from "react-icons/go";
 import { Link } from "react-router-dom";
-
 import { useQuery } from "@tanstack/react-query";
 import TitleSkeleton from "./TitleSkeleton";
 import CategorySkeleton from "./CategorySkeleton";
@@ -51,9 +50,9 @@ const Categories = ({ heading, allCategories = true, link }) => {
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {displayedCategories.map((category, index) => (
+        {displayedCategories.map((category) => (
           <div
-            key={index}
+            key={category}
             className="group relative h-48 rounded-2xl overflow-hidden cursor-pointer 
                        shadow-lg dark:shadow-slate-950/50 active:scale-[0.98] transition-all duration-300"
           >

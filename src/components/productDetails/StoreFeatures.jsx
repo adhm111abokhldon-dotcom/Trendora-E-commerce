@@ -26,7 +26,7 @@ const StoreFeatures = () => {
   ];
 
   return (
-    <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
+    <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {features.map((feature, index) => (
         <div key={index} className="flex  gap-4 items-center ">
           <div

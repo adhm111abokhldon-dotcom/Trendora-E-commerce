@@ -15,7 +15,7 @@ const ProductReview = ({ product }) => {
         {product.reviews.map((review, index) => (
           <div
             key={index}
-            className="flex flex-col justify-between p-6 bg-base-surface dark:bg-slate-900 rounded-2xl shadow-sm border
+            className="flex flex-col justify-between p-6 bg-base-surface dark:bg-dark-bg rounded-2xl shadow-sm border
              border-border-light dark:border-border-dark transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
           >
             <div>
@@ -53,7 +53,7 @@ const ProductReview = ({ product }) => {
                 className="text-base-text  dark:text-dark-text font-extralight 
               text-sm leading-relaxed italic mb-4"
               >
-                "{review.comment}"
+                &quot;{review.comment}&quot;
               </p>
             </div>
 
@@ -63,12 +63,12 @@ const ProductReview = ({ product }) => {
              border-border-light dark:border-border-dark"
             >
               <div>
-                <p className="text-xs text-gray-400 dark:text-gray-500  max-w-37.5">
+                <p className="text-xs text-base-text-faint  max-w-37.5">
                   {review.reviewerEmail}
                 </p>
               </div>
 
-              <span className="text-[11px] text-gray-400 bg-gray-100 dark:bg-zinc-700 px-2 py-1 rounded-md ">
+              <span className="text-[11px] text-base-text-faint  bg-base-bg dark:bg-dark-surface px-2 py-1 rounded-md ">
                 {new Date(review.date).toLocaleDateString(undefined, {
                   month: "short",
                   day: "numeric",

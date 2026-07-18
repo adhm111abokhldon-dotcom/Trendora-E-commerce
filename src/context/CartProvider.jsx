@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
     });
     cartDispatch({ type: "ADD_TO_CART", payload: item });
   };
-  const handdleDeleteFromCart = (item) => {
+  const handleDeleteFromCart = (item) => {
     toast.info("Removed from Cart!", {
       description: `${item.title} has been Removed from your cart`,
       position: "bottom-right",
@@ -43,7 +43,7 @@ export const CartProvider = ({ children }) => {
   const handleClearCart = () => {
     if (cartState.cartItems.length === 0) return;
     toast.info("Clear Cart", {
-      description: `Cart has been Cleared succsessfully.`,
+      description: `Cart has been Cleared successfully.`,
       position: "bottom-right",
     });
     cartDispatch({ type: "CLEAR_CART" });
@@ -73,7 +73,7 @@ export const CartProvider = ({ children }) => {
         cartItemsCount,
         cartItems: cartState.cartItems,
         handleClearCart,
-        handdleDeleteFromCart,
+        handleDeleteFromCart,
         handleAddToCart,
         handleLogoutCart,
       }}

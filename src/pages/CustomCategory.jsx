@@ -38,7 +38,7 @@ const CustomCategory = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["customCategory", categoryName],
+    queryKey: ["customCategory100"],
     queryFn: fetchCategory,
   });
   const allDisapled = allProducts?.products || [];

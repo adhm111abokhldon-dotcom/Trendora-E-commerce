@@ -39,7 +39,7 @@ export default function FeaturedCategories() {
 
   return (
     <section className="section-padding px-4 max-w-7xl mx-auto bg-base-bg dark:bg-dark-surface">
-      <Title subHeading={""} heading={" Explore Trendora Spaces"} />
+      <Title subHeading={" "} heading={" Explore Trendora Spaces"} />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         {categories.map((cat) => (
           <div
@@ -55,20 +55,21 @@ export default function FeaturedCategories() {
                 <span className="text-base-text-muted text-xs font-semibold">
                   {cat.count}
                 </span>
-                <h3 className="text-xl md:text-2xl font-black mt-1 text-accent-trendora transition-colors duration-300">
+                <h3 className="text-xl md:text-2xl font-black mt-1 text-accent-trendora ">
                   {cat.title}
                 </h3>
-                <div className="mt-4">
-                  <button
+                <p className="mt-1 text-slate-400 text-xs md:text-base font-medium">
+                  {cat.subtitle}
+                </p>
+                <div className="mt-4  ">
+                  <Link
+                    to={cat.url}
                     className="bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl
                      border border-slate-700 group-hover:bg-white
                    group-hover:text-slate-950 transition-all duration-300 active:scale-95"
                   >
-                    <Link className="w-full h-full" to={cat.url}>
-                      {" "}
-                      View Space
-                    </Link>
-                  </button>
+                    View Space
+                  </Link>
                 </div>
               </div>
 

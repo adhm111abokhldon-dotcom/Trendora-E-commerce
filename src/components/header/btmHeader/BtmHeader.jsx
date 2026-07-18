@@ -74,7 +74,11 @@ const BtmHeader = ({ theme, setTheme }) => {
         </button>
 
         <SearchLay isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} />
-        <SideMenuNav isOpen={isSideMenuOpen} setIsOpen={setIsSideMenuOpen} />
+        <SideMenuNav
+          isOpen={isSideMenuOpen}
+          setIsOpen={setIsSideMenuOpen}
+          menuData={NavData}
+        />
         {/* Mood */}
         <button
           className="rounded-full flex-center text-base-text text-lg md:text-3xl dark:text-dark-text 

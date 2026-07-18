@@ -3,32 +3,39 @@ import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
 const footerLinks = [
   {
     title: "Shop",
-    routes: [
-      { label: "New Arrivals", url: "/customCategory/new-arrivals" },
-      { label: "Best Sellers", url: "/customCategory/best-sellers" },
-      { label: "Hot Drops", url: "/customCategory/hot-drops" },
-      { label: "Trending Now", url: "/customCategory/trending" },
+    links: [
+      {
+        label: "New Arrivals",
+        url: "/customCategory/new-arrivals",
+        isRoute: true,
+      },
+      {
+        label: "Best Sellers",
+        url: "/customCategory/best-sellers",
+        isRoute: true,
+      },
+      { label: "Hot Drops", url: "/customCategory/hot-drops", isRoute: true },
+      { label: "Trending Now", url: "/customCategory/trending", isRoute: true },
     ],
   },
   {
     title: "Support",
     links: [
-      { label: "Contact Us", url: "/#contact-us" },
-      { label: "FAQs", url: "/#FAQ" },
-      { label: "Shipping & Delivery", url: "/" },
-      { label: "Track Order", url: "/" },
+      { label: "Contact Us", url: "#contact-us", isRoute: false },
+      { label: "FAQs", url: "#FAQ", isRoute: false },
+      { label: "Shipping & Delivery", url: "#", isRoute: false },
+      { label: "Track Order", url: "#", isRoute: false },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Terms of Service", url: "/" },
-      { label: "Privacy Policy", url: "/" },
-      { label: "Return Policy", url: "/" },
+      { label: "Terms of Service", url: "#", isRoute: false },
+      { label: "Privacy Policy", url: "#", isRoute: false },
+      { label: "Return Policy", url: "#", isRoute: false },
     ],
   },
 ];
@@ -104,24 +111,23 @@ export default function Footer() {
                 {group.title}
               </h4>
               <ul className="flex flex-col gap-2.5">
-                {group.links?.map((link) => (
+                {group.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.url}
-                      className="text-base-text-muted dark:text-dark-text-muted text-sm hover:text-accent-trendora dark:hover:text-accent-trendora transition-colors duration-200"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-                {group.routes?.map((route) => (
-                  <li
-                    className="text-base-text-muted dark:text-dark-text-muted text-sm hover:text-accent-trendora dark:hover:text-accent-trendora transition-colors duration-200"
-                    key={route.label}
-                  >
-                    <Link className="w-full h-full" to={route.url}>
-                      {route.label}
-                    </Link>
+                    {link.isRoute ? (
+                      <Link
+                        className="w-full h-full text-base-text-muted dark:text-dark-text-muted text-sm hover:text-accent-trendora dark:hover:text-accent-trendora transition-colors duration-200"
+                        to={link.url}
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.url}
+                        className="text-base-text-muted dark:text-dark-text-muted text-sm hover:text-accent-trendora dark:hover:text-accent-trendora transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -133,9 +139,7 @@ export default function Footer() {
           className="border-t border-border-light dark:border-border-dark
          pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-base-text-faint"
         >
-          <div>
-            &copy; {new Date().getFullYear()} Trendora. All rights reserved.
-          </div>
+          <div>&copy; 2026 Trendora. All rights reserved.</div>
 
           <ul className="flex  gap-4 items-center">
             {contactData.map((link) => (
@@ -143,7 +147,9 @@ export default function Footer() {
                 key={link.href}
                 className={` ${link.className} text-4xl cursor-pointer transition-colors`}
               >
-                <a href={link.href}>{link.icon}</a>
+                <a target="_blank" rel="noreferrer" href={link.href}>
+                  {link.icon}
+                </a>
               </li>
             ))}
           </ul>

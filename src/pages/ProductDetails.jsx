@@ -75,8 +75,8 @@ const ProductDetails = () => {
       <div className="bg-base-bg dark:bg-dark-surface">
         <section className="custom-container section-padding">
           <Title
-            heading={product?.category.replace("-", " ")}
-            subHeading={product?.title.replace("-", " ")}
+            heading={product?.category.replaceAll("-", " ")}
+            subHeading={product?.title.replaceAll("-", " ")}
           />
 
           <ProductDetailsHero product={product} key={id} />
