@@ -6,7 +6,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* 1. رسم الحركة (Keyframes) */
   @keyframes marquee {
     0% {
       transform: translateX(0%);
@@ -16,7 +15,6 @@
     }
   }
 
-  /* 2. ربط الحركة وتحديد القوانين (Animation) */
   --animate-marquee: marquee 25s linear infinite;
 }
 @theme {
@@ -24,30 +22,25 @@
   --color-base-bg: #fafaf9;
   --color-base-surface: #ffffff;
   --color-base-text: #1c1917;
-  --color-base-text-muted: oklch(
-    55% 0.015 60
-  ); /* كانت hue 256 (أزرق) صارت stone دافئة */
+  --color-base-text-muted: oklch(55% 0.015 60);
   --color-base-text-faint: #a8a29e;
   --color-border-light: #e5e3de;
 
-  /* --- DARK MODE COLORS --- */
   --color-dark-bg: #18151a;
   --color-dark-surface: #221e24;
   --color-dark-text: #ededef;
   --color-dark-text-muted: #9c9ca3;
   --color-border-dark: #322c34;
 
-  /* --- BRAND & INTERACTION COLORS --- */
   --color-accent-trendora: oklch(76.9% 0.188 70.08);
   --color-accent-hover: oklch(66.6% 0.179 70.08);
   --color-accent-light: #e0b876;
 
-  /* --- STATUS COLORS (ألوان الحالات) --- */
   --color-success: #3d7a5c;
-  --color-success-hover: #2f5e47; /* مفقود: للـ Hover */
+  --color-success-hover: #2f5e47;
 
   --color-danger: #b8443d;
-  --color-danger-hover: #96332d; /* مفقود: للـ Hover */
+  --color-danger-hover: #96332d;
 
   --font-heading: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -107,6 +100,23 @@ a {
 }
 @utility section-padding {
   @apply pt-15 md:pt-20 lg:pt-25;
+}
+
+@import "nprogress/nprogress.css";
+
+#nprogress .bar {
+  background: oklch(76.9% 0.188 70.08) !important;
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px oklch(76.9% 0.188 70.08),
+    0 0 5px oklch(76.9% 0.188 70.08) !important;
+}
+
+#nprogress .spinner {
+  display: none !important;
 }
 
 @theme inline {
