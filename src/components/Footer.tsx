@@ -4,8 +4,6 @@ import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-
-
 const footerLinks = [
   {
     title: "Shop",
@@ -73,6 +71,7 @@ const contactData = [
 export default function Footer() {
   return (
     <footer
+      id="contact-us"
       className="bg-base-surface dark:bg-dark-bg border-t border-border-light
        dark:border-border-dark pt-15 md:pt-20 pb-8 mt-10"
       dir="ltr"

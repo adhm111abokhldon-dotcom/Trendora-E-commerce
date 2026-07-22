@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 type SideMenuNavProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  menuData: { to: string; title: string }[];
+  menuData: { to: string; title: string; isRoute: boolean }[];
 };
 
 const SideMenuNav = ({ isOpen, setIsOpen, menuData }: SideMenuNavProps) => {
@@ -35,24 +35,43 @@ const SideMenuNav = ({ isOpen, setIsOpen, menuData }: SideMenuNavProps) => {
              hover:text-accent-trendora transition"
           />
         </li>
-        {menuData.map((item, index) => (
-          <li
-            className="w-full cursor-pointer border-b font-medium border-border-light
+        {menuData.map((item, index) =>
+          item.isRoute ? (
+            <li
+              className="w-full cursor-pointer border-b font-medium border-border-light
              dark:border-border-dark  px-5 py-4
              text-base-text hover:text-accent-trendora dark:text-dark-text bg-base-bg
              hover:bg-slate-100
              dark:bg-dark-surface dark:hover:bg-border-dark"
-            key={index}
-          >
-            <Link
-              onClick={() => setIsOpen(false)}
-              className="block w-full"
-              to={item.to}
+              key={index}
             >
-              {item.title}
-            </Link>
-          </li>
-        ))}
+              <Link
+                onClick={() => setIsOpen(false)}
+                className="block w-full"
+                to={item.to}
+              >
+                {item.title}
+              </Link>
+            </li>
+          ) : (
+            <li
+              className="w-full cursor-pointer border-b font-medium border-border-light
+             dark:border-border-dark  px-5 py-4
+             text-base-text hover:text-accent-trendora dark:text-dark-text bg-base-bg
+             hover:bg-slate-100
+             dark:bg-dark-surface dark:hover:bg-border-dark"
+              key={index}
+            >
+              <a
+                onClick={() => setIsOpen(false)}
+                className="block w-full"
+                href={item.to}
+              >
+                {item.title}
+              </a>
+            </li>
+          ),
+        )}
       </ul>
     </>,
     document.body,

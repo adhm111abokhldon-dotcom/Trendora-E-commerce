@@ -17,10 +17,9 @@ const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const NavData = [
-    { to: "/", title: "Home" },
-    { to: "/categories", title: "Categories" },
-    { to: "/contact-us", title: "Contact Us" },
-    { to: "/shop", title: "Shop All" },
+    { to: "/", title: "Home", isRoute: true },
+    { to: "/categories", title: "Categories", isRoute: true },
+    { to: "#contact-us", title: "Contact Us", isRoute: false },
   ];
   return (
     <div
@@ -34,11 +33,17 @@ const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
           font-medium
          text-base-text dark:text-dark-text"
         >
-          {NavData.map((item, index) => (
-            <li key={index} className="hover:text-accent-trendora transition">
-              <Link to={item.to}>{item.title}</Link>
-            </li>
-          ))}
+          {NavData.map((item, index) =>
+            item.isRoute ? (
+              <li key={index} className="hover:text-accent-trendora transition">
+                <Link to={item.to}>{item.title}</Link>
+              </li>
+            ) : (
+              <li key={index} className="hover:text-accent-trendora transition">
+                <a href={item.to}>{item.title}</a>
+              </li>
+            ),
+          )}
         </ul>
       </div>
 
