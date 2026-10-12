@@ -1,5 +1,5 @@
 export type Product = {
-  id: number;
+  _id: number;
   availabilityStatus: "In Stock" | "Out of Stock";
   brand: string;
   title: string;

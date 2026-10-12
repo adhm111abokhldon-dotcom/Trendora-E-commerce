@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import TitleSkeleton from "./TitleSkeleton";
 import CategorySkeleton from "./CategorySkeleton";
 import Title from "./Title";
+import { getCategories } from "@/api/products";
 
 type CategoriesProps = {
   heading: string;
@@ -16,21 +17,15 @@ const Categories = ({
   allCategories = true,
   link,
 }: CategoriesProps) => {
-  const fetchCategories = async (): Promise<string[]> => {
-    const res = await fetch("https://dummyjson.com/products/category-list");
-    if (!res.ok) throw new Error("Failed to fetch Categories");
-
-    return res.json();
-  };
-
   const {
     data: categories,
     isLoading,
     error,
   } = useQuery<string[]>({
     queryKey: ["categories"],
-    queryFn: fetchCategories,
+    queryFn: getCategories,
   });
+  console.log(categories);
   if (error) return <p>{error.message}</p>;
   if (isLoading) {
     return (

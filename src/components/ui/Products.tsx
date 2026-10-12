@@ -43,22 +43,23 @@ const Products = ({ allProducts, heading, subHeading }: ProductsProps) => {
       <Title heading={heading} subHeading={subHeading} />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {allProducts.map((item) => (
-          <ProductCardComponent key={item.id}>
+          <ProductCardComponent key={item._id}>
             <ProductCardComponent.Image
-              path={`/products/${item.id}`}
+              path={`/products/${item._id}`}
               src={item.images[0]}
               alt={item.title}
               discount={item.discountPercentage}
+              
               className="w-full h-35 md:h-40"
             >
               {authState.isAuthenticated ? (
                 <button
-                  className={`${isInWishList(item.id) ? "text-danger" : ""} absolute bg-base-bg top-1 
+                  className={`${isInWishList(item._id) ? "text-danger" : ""} absolute bg-base-bg top-1 
                 right-2 sm:right-3 p-2  backdrop-blur-sm rounded-full  
               hover:scale-110 transition z-10 shadow-sm`}
                   onClick={() => handleToggleWishlist(item)}
                 >
-                  {isInWishList(item.id) ? <FaHeart /> : <FaRegHeart />}
+                  {isInWishList(item._id) ? <FaHeart /> : <FaRegHeart />}
                 </button>
               ) : (
                 <button

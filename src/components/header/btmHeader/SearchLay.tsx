@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import { Product } from "@/types/ecommerce";
+import { searchProducts } from "@/api/products";
 
 type SearchLayProps = {
   isOpen: boolean;
@@ -40,13 +41,10 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
     setIsLoading(true);
 
     const timer = setTimeout(() => {
-      fetch(`https://dummyjson.com/products/search?q=${input}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProducts(data.products || []);
-        })
+      searchProducts(input)
+        .then((data) => setProducts(data))
         .catch((error) => {
-          console.error("Fetch error:", error);
+          console.error("error", error);
           setProducts([]);
         })
         .finally(() => setIsLoading(false));
@@ -135,7 +133,7 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
                   >
                     {products.map((item) => (
                       <li
-                        key={item.id}
+                        key={item._id}
                         className="px-4 gap-2 flex py-3 hover:text-accent-trendora dark:hover:bg-border-dark
                         transition text-sm text-base-text dark:text-dark-text"
                       >
@@ -145,7 +143,7 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
                           alt={item.title}
                         />
                         <Link
-                          to={`/products/${item.id}`}
+                          to={`/products/${item._id}`}
                           className="block w-full truncate "
                           onClick={() => setIsOpen(false)}
                         >

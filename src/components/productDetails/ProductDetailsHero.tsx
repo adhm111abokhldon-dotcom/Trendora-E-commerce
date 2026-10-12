@@ -16,7 +16,7 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
   const { handleAddToCart, cartItems } = useCart();
 
   const images = product?.images ?? [];
-  const isInCart = cartItems.some((item) => item.id === product?.id);
+  const isInCart = cartItems.some((item) => item._id === product?._id);
   const isInStock = product?.availabilityStatus === "In Stock";
   const canAddToCart = isInStock && !isInCart;
 
@@ -27,7 +27,7 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
         return images[0];
       });
     }
-  }, [product?.id, images]);
+  }, [product?._id, images]);
 
   const stars = useMemo(
     () => getProductRating(Number(product?.rating ?? 0)),

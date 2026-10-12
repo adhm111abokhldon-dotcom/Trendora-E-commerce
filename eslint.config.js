@@ -36,7 +36,7 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
-      // السطر التالي يمنع ظهور خطأ مزعج مع React 19 بخصوص استيراد React في كل ملف
+
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
     },

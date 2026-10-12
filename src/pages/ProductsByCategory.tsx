@@ -1,3 +1,4 @@
+import { getProductsByCategory } from "@/api/products";
 import PageTransition from "@/components/PageTransition";
 import Products from "@/components/ui/Products";
 import ProductSkeleton from "@/components/ui/ProductSkeleton";
@@ -8,18 +9,14 @@ import { useParams } from "react-router-dom";
 const ProductsByCategory = () => {
   const { category = "" } = useParams();
 
-  const fetchProducts = async () => {
-    const res = await fetch(
-      `https://dummyjson.com/products/category/${category}`,
-    );
-    if (!res.ok) throw new Error("Faild to fetch Products");
-    return res.json();
-  };
   const {
     data: allProducts,
     isLoading,
     error,
-  } = useQuery({ queryKey: ["allProducts", category], queryFn: fetchProducts });
+  } = useQuery({
+    queryKey: ["allProducts", category],
+    queryFn: () => getProductsByCategory(category),
+  });
   console.log(allProducts);
   if (error) return <p>{error.message}</p>;
   if (isLoading)
@@ -43,8 +40,8 @@ const ProductsByCategory = () => {
     <PageTransition>
       <Products
         heading={category.replace("-", " ")}
-        subHeading={`${allProducts.products.length} products Available`}
-        allProducts={allProducts.products}
+        subHeading={`${allProducts.length} products Available`}
+        allProducts={allProducts}
       />
     </PageTransition>
   );

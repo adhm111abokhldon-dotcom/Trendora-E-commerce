@@ -9,14 +9,11 @@ import Title from "@/components/ui/Title";
 import TitleSkeleton from "@/components/ui/TitleSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { getProduct, getProductsByCategory } from "@/api/products";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const fetchProduct = async () => {
-    const res = await fetch(`https://dummyjson.com/products/${id}`);
-    if (!res.ok) throw new Error("Failed to fetch Product");
-    return res.json();
-  };
+  const fetchProduct = () => getProduct(id);
 
   const {
     data: product,
@@ -28,12 +25,10 @@ const ProductDetails = () => {
   });
 
   const fetchProducts = async () => {
-    const res = await fetch(
-      `https://dummyjson.com/products/category/${product?.category}`,
-    );
-    if (!res.ok) throw new Error("Failed to fetch Products");
-    const data = await res.json();
-    return data.products;
+    if (!product?.category) {
+      throw new Error("category is missing");
+    }
+    return getProductsByCategory(product.category);
   };
 
   const {
@@ -69,15 +64,12 @@ const ProductDetails = () => {
       </>
     );
   }
-  const relatedProducts = products.slice(0, 5);
+  const relatedProducts = products;
   return (
     <PageTransition>
       <div className="bg-base-bg dark:bg-dark-surface">
         <section className="custom-container section-padding">
-          <Title
-            heading={product?.category.replaceAll("-", " ")}
-            subHeading={product?.title.replaceAll("-", " ")}
-          />
+          <Title heading={product.title} subHeading={product.description} />
 
           <ProductDetailsHero product={product} key={id} />
         </section>
