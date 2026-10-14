@@ -8,10 +8,11 @@ import {
 import { CartAction, cartReducer, initialCartState } from "./cartReducer";
 import { toast } from "sonner";
 import { CartItem, Product } from "@/types/ecommerce";
+import { useI18n } from "@/i18n";
 
 type CartContextType = {
   cartDispatch: Dispatch<CartAction>;
-  isInStock: (product: Product) => "In Stock" | "Out of Stock";
+  isInStock: (product: Product) => boolean;
   isInCart: (product: Product) => boolean;
   totalPrice: number;
   cartItemsCount: number;
@@ -30,40 +31,43 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     undefined,
     initialCartState,
   );
+  const { t } = useI18n();
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartState));
   }, [cartState]);
 
   const handleAddToCart = (item: Product) => {
-    toast.success("Added to Cart!", {
-      description: `${item.title} has been added succsessfully.`,
+    const stock = Number(item.stock);
+    if (!Number.isFinite(stock) || stock <= 0) return;
+    toast.success(t("toast.addedToCart"), {
+      description: t("toast.addedToCartDesc", { title: item.title }),
       position: "bottom-right",
     });
     cartDispatch({ type: "ADD_TO_CART", payload: item });
   };
   const handleDeleteFromCart = (item: Product) => {
-    toast.info("Removed from Cart!", {
-      description: `${item.title} has been Removed from your cart`,
+    toast.info(t("toast.removedFromCart"), {
+      description: t("toast.removedFromCartDesc", { title: item.title }),
       position: "bottom-right",
       action: {
-        label: "Undo",
+        label: t("toast.undo"),
         onClick: () => {
           cartDispatch({ type: "ADD_TO_CART", payload: item });
-          toast.success("Restored to Cart");
+          toast.success(t("toast.restored"));
         },
       },
     });
 
-    cartDispatch({ type: "DELETE_FROM_CART", payload: item });
+    cartDispatch({ type: "DELETE_FROM_CART", payload: { _id: item._id } });
   };
   const handleLogoutCart = () => {
     cartDispatch({ type: "CLEAR_CART" });
   };
   const handleClearCart = () => {
     if (cartState.cartItems.length === 0) return;
-    toast.info("Clear Cart", {
-      description: `Cart has been Cleared successfully.`,
+    toast.info(t("toast.clearCart"), {
+      description: t("toast.clearCartDesc"),
       position: "bottom-right",
     });
     cartDispatch({ type: "CLEAR_CART" });
@@ -79,9 +83,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     0,
   );
 
-  const isInStock = (product: Product) => product.availabilityStatus;
+  const isInStock = (product: Product) => Number(product.stock) > 0;
   const isInCart = (product: Product) =>
-    cartState.cartItems.some((item: Product) => item.id === product.id);
+    cartState.cartItems.some((item: CartItem) => item._id === product._id);
 
   return (
     <CartContext.Provider
@@ -112,3 +116,4 @@ export const useCart = () => {
 };
 
 export default CartProvider;
+

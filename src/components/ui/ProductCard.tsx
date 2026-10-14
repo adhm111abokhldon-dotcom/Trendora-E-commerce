@@ -1,6 +1,7 @@
 import React from "react";
 import { GoArrowRight } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { useI18n } from "@/i18n";
 
 type ProductCardProps = {
   children: React.ReactNode;
@@ -41,28 +42,31 @@ const CardImage = ({
   className = "",
   children,
 }: CardImageProps) => {
+  const { t } = useI18n();
   return (
     <div
       className={`relative bg-gray-50 dark:bg-dark-bg overflow-hidden shrink-0 ${className}`}
     >
-      {discount && (
-        <div className="absolute top-2 left-3 text-base-text-faint text-[10px] md:text-xs bg-danger font-semibold px-2 py-1 rounded-xl z-10">
-          <span>{Math.round(discount)}% OFF</span>
+      {!!discount && discount > 0 && (
+        <div className="absolute top-2 left-3 rtl:left-auto rtl:right-3 text-base-text-faint text-[10px] md:text-xs bg-danger font-semibold px-2 py-1 rounded-xl z-10">
+          <span>{t("product.off", { n: Math.round(discount) })}</span>
         </div>
       )}
       {children}
       <img
         src={src}
         alt={alt}
+        loading="lazy"
         className="w-full h-full object-contain p-2 md:p-4 group-hover:scale-105 transition"
       />
       <Link
         to={path}
-        className=" absolute bottom-0 right-1  gap-1  flex items-center hover:text-accent-hover
+        className=" absolute bottom-0 right-1 rtl:right-auto rtl:left-1  gap-1  flex items-center hover:text-accent-hover
          text-xs text-accent-trendora font-semibold opacity-90
                  transition-all duration-300   "
       >
-        View Space <GoArrowRight className="text-sm " />
+        {t("product.view")}{" "}
+        <GoArrowRight className="text-sm rtl:rotate-180" />
       </Link>
     </div>
   );
@@ -98,3 +102,4 @@ export const ProductCardComponent = Object.assign(ProductCard, {
   Body: CardBody,
 });
 export default ProductCard;
+

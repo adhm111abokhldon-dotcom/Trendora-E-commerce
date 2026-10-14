@@ -1,27 +1,29 @@
 import { FaTruckFast, FaArrowRotateLeft, FaHeadphones } from "react-icons/fa6";
 import { IoShieldCheckmark } from "react-icons/io5";
+import { useI18n } from "@/i18n";
 
 const StoreFeatures = () => {
+  const { t } = useI18n();
   const features = [
     {
       icon: <FaTruckFast className="text-2xl text-accent-trendora " />,
-      title: "Fast Shipping",
-      description: "Free Fast delivery for orders over $100",
+      title: t("store.fastShipping"),
+      description: t("store.fastShippingDesc"),
     },
     {
       icon: <IoShieldCheckmark className="text-2xl text-accent-trendora" />,
-      title: "Secure Payment",
-      description: "100% protected payment methods",
+      title: t("store.securePayment"),
+      description: t("store.securePaymentDesc"),
     },
     {
       icon: <FaArrowRotateLeft className="text-2xl text-accent-trendora" />,
-      title: "Easy Returns",
-      description: "14 days money-back guarantee",
+      title: t("store.easyReturns"),
+      description: t("store.easyReturnsDesc"),
     },
     {
       icon: <FaHeadphones className="text-2xl text-accent-trendora" />,
-      title: "24/7 Support",
-      description: "Dedicated backup professional team",
+      title: t("store.support"),
+      description: t("store.supportDesc"),
     },
   ];
 

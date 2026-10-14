@@ -18,34 +18,20 @@ import { Button } from "@base-ui/react";
 import { useState } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import { toast } from "sonner";
+import { login } from "@/api/auth";
+import { useI18n } from "@/i18n";
 
-const loginRequest = async ({
+const loginRequest = ({
   username,
   password,
 }: {
   username: string;
   password: string;
-}) => {
-  const res = await fetch("https://dummyjson.com/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username,
-      password,
-    }),
-  });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Failed to log in");
-  }
-  return res.json();
-};
-
-//
+}) => login({ username, password });
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { t } = useI18n();
 
   const form = useForm({
     resolver: zodResolver(loginSchemas),
@@ -56,11 +42,7 @@ const Login = () => {
     },
   });
 
-  const { control, handleSubmit, reset } = form;
-
-  const onSubmit = (data: any) => {
-    loginMutation.mutate(data);
-  };
+  const { control, handleSubmit, reset, setValue } = form;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -73,14 +55,17 @@ const Login = () => {
     onSuccess: (data) => {
       handleLogin(data);
       reset();
-      setTimeout(() => {
-        navigate(from, { replace: true });
-      }, 1500);
+      navigate(from, { replace: true });
     },
-    onError: (error) => {
-      toast.error(error.message || "Invalid username or password");
+    onError: (error: Error) => {
+      toast.error(error.message || t("login.error.invalid"));
     },
   });
+
+  const onSubmit = (data: { username: string; password: string }) => {
+    loginMutation.mutate(data);
+  };
+
 
   return (
     <PageTransition>
@@ -92,17 +77,33 @@ const Login = () => {
         >
           <Link
             to={"/"}
-            className="absolute top-5 right-4 text-danger hover:text-danger-hover transition-colors"
+            className="absolute top-5 end-4 text-danger hover:text-danger-hover transition-colors"
           >
             <X className=" size-10 " />
           </Link>
           <div className="text-center mb-8">
             <h2 className="text-3xl font-extrabold text-base-text dark:text-dark-text tracking-tight mb-2">
-              Welcome Back
+              {t("login.welcome")}
             </h2>
             <p className="text-sm text-base-text-muted dark:text-dark-text-muted font-medium">
-              Log in to your Trendora account
+              {t("login.subtitle")}
             </p>
+
+            {/* Honest demo-access explanation */}
+            <div
+              className="mt-4 text-start text-xs leading-relaxed rounded-lg
+              border border-border-light dark:border-border-dark bg-base-bg
+              dark:bg-dark-bg p-3 text-base-text-muted dark:text-dark-text-muted"
+              role="note"
+            >
+              <span className="font-bold text-accent-trendora">
+                {t("login.demoHint")}
+              </span>{" "}
+              {t("login.demoNotice")}{" "}
+              <span className="font-semibold text-base-text dark:text-dark-text">
+                {t("login.demoCreds")}
+              </span>
+            </div>
           </div>
 
           <Form {...form}>
@@ -125,12 +126,13 @@ const Login = () => {
                       className="text-xs font-bold  tracking-wider
                      text-base-text/80 dark:text-dark-text/80"
                     >
-                      User Name
+                      {t("login.username")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Enter your username"
+                        autoComplete="username"
+                        placeholder={t("login.usernamePlaceholder")}
                         className={`h-11 px-4 rounded-lg bg-base-bg dark:bg-dark-bg border text-base-text dark:text-dark-text transition-all duration-200 placeholder:text-base-text-faint
                         ${
                           fieldState.error
@@ -158,10 +160,10 @@ const Login = () => {
                   <FormItem className="flex flex-col gap-1.5">
                     <div className="flex justify-between items-center">
                       <FormLabel className="text-xs font-bold  tracking-wider text-base-text/80 dark:text-dark-text/80">
-                        Password
+                        {t("login.password")}
                       </FormLabel>
                       <span className="text-xs font-semibold text-accent-hover">
-                        Forgot?
+                        {t("login.forgot")}
                       </span>
                     </div>
 
@@ -170,7 +172,8 @@ const Login = () => {
                         <Input
                           {...field}
                           type={showPassword ? "text" : "password"}
-                          placeholder="Enter your password"
+                          autoComplete="current-password"
+                          placeholder={t("login.passwordPlaceholder")}
                           className={`h-11 ps-4 pe-12 rounded-lg bg-base-bg dark:bg-dark-bg border text-base-text
                              dark:text-dark-text transition-all duration-200 placeholder:text-base-text-faint w-full
               ${
@@ -184,7 +187,12 @@ const Login = () => {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 text-base-text-muted dark:text-dark-text-muted hover:text-base-text
+                        aria-label={
+                          showPassword
+                            ? t("login.hidePassword")
+                            : t("login.showPassword")
+                        }
+                        className="absolute end-3 text-base-text-muted dark:text-dark-text-muted hover:text-base-text
                          dark:hover:text-dark-text transition-colors p-1 rounded-md"
                       >
                         {showPassword ? (
@@ -202,7 +210,7 @@ const Login = () => {
 
               <Button
                 type="submit"
-                disabled={loginMutation.isPending || loginMutation.isSuccess}
+                disabled={loginMutation.isPending}
                 className="w-full h-11 mt-2 bg-accent-trendora hover:bg-accent-hover
                  text-stone-900 font-bold rounded-lg shadow-sm transition-all duration-200
                   flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -213,21 +221,47 @@ const Login = () => {
                       className="w-4 h-4 border-2 border-stone-900 border-t-transparent 
                     rounded-full animate-spin"
                     />
-                    Logging in...
+                    {t("login.signingIn")}
                   </span>
                 ) : (
-                  "Sign In"
+                  t("login.signIn")
                 )}
+              </Button>
+
+              {/* Demo helper: fills the existing fields; the visitor still
+                  submits via the normal Sign In button above. */}
+              <Button
+                type="button"
+                onClick={() => {
+                  setValue("username", "demo", {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
+                  setValue("password", "demo1234", {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
+                }}
+                className="w-full h-11 mt-3 bg-transparent hover:bg-base-bg
+                 dark:hover:bg-dark-bg text-base-text dark:text-dark-text
+                 font-bold rounded-lg border border-border-light
+                 dark:border-border-dark transition-all duration-200
+                 flex items-center justify-center gap-2"
+              >
+                {t("login.tryDemo")}
               </Button>
             </form>
           </Form>
 
           <div className="mt-8 text-center border-t border-border-light dark:border-border-dark pt-6">
             <p className="text-sm text-base-text-muted dark:text-dark-text-muted">
-              Don&apos;t have an account?{" "}
-              <span className="font-bold text-base-text dark:text-dark-text hover:text-accent-hover dark:hover:text-accent-trendora transition-colors">
-                Sign up
-              </span>
+              {t("login.browseNoAccount")}{" "}
+              <Link
+                to="/categories"
+                className="font-bold text-base-text dark:text-dark-text hover:text-accent-hover dark:hover:text-accent-trendora transition-colors"
+              >
+                {t("nav.demoCta")}
+              </Link>
             </p>
           </div>
         </div>

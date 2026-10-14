@@ -1,25 +1,35 @@
 export type Product = {
-  _id: number;
-  availabilityStatus: "In Stock" | "Out of Stock";
-  brand: string;
+  _id: string;
   title: string;
-  category: string;
   description: string;
+  category: string;
   price: number;
-  images: string[];
-  rating: number;
+  discountPercentage?: number;
+  rating?: number;
   stock: number;
-  reviews: {
-    reviewerEmail: string;
-    reviewerName: string;
-    comment: string;
+  brand?: string;
+  sku?: string;
+  weight?: number;
+  tags?: string[];
+  images: string[];
+  thumbnail?: string;
+  availabilityStatus?: string;
+  warrantyInformation?: string;
+  shippingInformation?: string;
+  returnPolicy?: string;
+  minimumOrderQuantity?: number;
+  reviews?: {
     rating: number;
+    comment: string;
     date: string;
+    reviewerName: string;
+    reviewerEmail: string;
   }[];
-  discountPercentage: number;
-  meta: {
+  meta?: {
     createdAt: string;
     updatedAt?: string;
+    barcode?: string;
+    qrCode?: string;
   };
 };
 
@@ -28,3 +38,11 @@ export type CartItem = Product & {
 };
 
 export type WishlistItem = Product;
+
+export type User = {
+  id: string;
+  username: string;
+  name?: string;
+  email?: string;
+};
+

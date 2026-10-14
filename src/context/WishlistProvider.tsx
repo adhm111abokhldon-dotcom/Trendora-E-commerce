@@ -12,6 +12,7 @@ import {
 } from "./wishlistReducer";
 import { toast } from "sonner";
 import { Product } from "@/types/ecommerce";
+import { useI18n } from "@/i18n";
 
 type WishListContextType = {
   handleClearWishlist: () => void;
@@ -19,7 +20,7 @@ type WishListContextType = {
   wishListState: Product[];
   wishListDispatch: Dispatch<WishListAction>;
   wishListItemsCount: number;
-  isInWishList: (id: number) => boolean;
+  isInWishList: (id: string) => boolean;
   handleLogoutWishList: () => void;
 };
 
@@ -31,36 +32,36 @@ const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
     null,
     initialWhishListItems,
   );
+  const { t } = useI18n();
 
   useEffect(() => {
     localStorage.setItem("wishList", JSON.stringify(wishListState));
   }, [wishListState]);
   const wishListItemsCount = wishListState.length;
-  const isInWishList = (id: number) =>
-    wishListState.some((item) => item.id === id);
+  const isInWishList = (id: string) =>
+    wishListState.some((item) => item._id === id);
 
   const handleToggleWishlist = (item: Product) => {
-    if (isInWishList(item.id)) {
-      toast.info("Removed from Wishlist!", {
-        description: `${item.title} has been Removed from your Wishlist`,
+    if (isInWishList(item._id)) {
+      toast.info(t("toast.removedFromWishlist"), {
+        description: t("toast.removedFromWishlistDesc", { title: item.title }),
         position: "bottom-right",
       });
-      wishListDispatch({ type: "TOGGLE_WISHLIST", payload: item });
     } else {
-      toast.success("Added to Wishlist!", {
-        description: `${item.title} has been added succsessfully.`,
+      toast.success(t("toast.addedToWishlist"), {
+        description: t("toast.addedToWishlistDesc", { title: item.title }),
         position: "bottom-right",
       });
-      wishListDispatch({ type: "TOGGLE_WISHLIST", payload: item });
     }
+    wishListDispatch({ type: "TOGGLE_WISHLIST", payload: item });
   };
   const handleLogoutWishList = () => {
     wishListDispatch({ type: "CLEAR_WISHLIST" });
   };
   const handleClearWishlist = () => {
     if (wishListItemsCount === 0) return;
-    toast.info("Clear Wishlist", {
-      description: `Wishlist has been Cleared succsessfully.`,
+    toast.info(t("toast.clearWishlist"), {
+      description: t("toast.clearWishlistDesc"),
       position: "bottom-right",
     });
     wishListDispatch({ type: "CLEAR_WISHLIST" });
@@ -92,3 +93,4 @@ export const useWishList = () => {
   }
   return context;
 };
+

@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { useI18n } from "@/i18n";
 
 type SideMenuNavProps = {
   isOpen: boolean;
@@ -10,6 +11,7 @@ type SideMenuNavProps = {
 };
 
 const SideMenuNav = ({ isOpen, setIsOpen, menuData }: SideMenuNavProps) => {
+  const { t } = useI18n();
   return createPortal(
     <>
       {/* Overlay behind side menu */}
@@ -25,11 +27,12 @@ const SideMenuNav = ({ isOpen, setIsOpen, menuData }: SideMenuNavProps) => {
         className={`fixed top-0 bottom-0 z-50 h-screen w-72 max-w-[80vw]
            bg-base-bg dark:bg-dark-bg pt-16 flex flex-col shadow-2xl transition-all 
            duration-300 md:hidden
-            ${isOpen ? "left-0" : "-left-full"}`}
+            ${isOpen ? "start-0" : "-start-full"}`}
       >
-        <li className="absolute top-4 right-4 text-2xl">
+        <li className="absolute top-4 end-4 text-2xl">
           <IoClose
             onClick={() => setIsOpen(false)}
+            aria-label={t("nav.close")}
             className="cursor-pointer text-base-text
              dark:text-dark-text
              hover:text-accent-trendora transition"

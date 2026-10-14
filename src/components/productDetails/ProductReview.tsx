@@ -3,11 +3,16 @@ import { FaStarHalfAlt } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import getProductRating from "@/utils/getProductRating";
 import { Product } from "@/types/ecommerce";
+import { useI18n } from "@/i18n";
 
 const ProductReview = ({ product }: { product: Product }) => {
+  const { t, lang } = useI18n();
+
   if (!product || !product.reviews)
     return (
-      <p className="text-center py-10  text-gray-500">Loading reviews...</p>
+      <p className="text-center py-10  text-gray-500">
+        {t("details.loadingReviews")}
+      </p>
     );
 
   return (
@@ -70,11 +75,14 @@ const ProductReview = ({ product }: { product: Product }) => {
               </div>
 
               <span className="text-[11px] text-base-text-faint  bg-base-bg dark:bg-dark-surface px-2 py-1 rounded-md ">
-                {new Date(review.date).toLocaleDateString(undefined, {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                {new Date(review.date).toLocaleDateString(
+                  lang === "ar" ? "ar" : "en",
+                  {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  },
+                )}
               </span>
             </div>
           </div>

@@ -1,34 +1,78 @@
 import api from "../lib/api";
+import { Product } from "../types/ecommerce";
 
-const getProducts = async () => {
-  const response = await api.get("/products");
-  return response.data;
+export type ProductsPage = {
+  products: Product[];
+  total: number;
+  page: number;
+  limit: number;
+  hasMore: boolean;
 };
 
-const searchProducts = async (search: string) => {
-  const response = await api.get("/products", { params: { search } });
-  return response.data;
+type ProductsResponse = {
+  status: string;
+  data: {
+    products: Product[];
+    total?: number;
+    page?: number;
+    limit?: number;
+    hasMore?: boolean;
+  };
+};
+type ProductResponse = { status: string; data: { product: Product } };
+type CategoriesResponse = { status: string; data: { categories: string[] } };
+
+export type ProductsQuery = {
+  page?: number;
+  limit?: number;
+  category?: string;
+  search?: string;
+  sort?: string;
+  minRating?: number;
 };
 
-const getCategories = async () => {
-  const response = await api.get("/products/categories");
-  return response.data;
+// One page of products from our backend (database-side pagination).
+const getProductsPage = async (params?: ProductsQuery): Promise<ProductsPage> => {
+  const response = await api.get<ProductsResponse>("/products", { params });
+  const { products, total, page, limit, hasMore } = response.data.data;
+  return {
+    products,
+    total: total ?? products.length,
+    page: page ?? params?.page ?? 1,
+    limit: limit ?? params?.limit ?? 10,
+    hasMore: hasMore ?? false,
+  };
 };
 
-const getProduct = async (id: any) => {
-  const response = await api.get(`/products/${id}`);
-  return response.data;
+// Plain-array helper kept for compatibility with existing consumers.
+const getProducts = async (params?: ProductsQuery): Promise<Product[]> => {
+  const page = await getProductsPage(params);
+  return page.products;
 };
 
-const getProductsByCategory = async (category: string) => {
-  const response = await api.get(`/products`, { params: { category } });
-  return response.data;
+const searchProducts = async (
+  search: string,
+  options?: { page?: number; limit?: number },
+): Promise<ProductsPage> => {
+  return getProductsPage({ search, ...options });
+};
+
+const getCategories = async (): Promise<string[]> => {
+  const response = await api.get<CategoriesResponse>("/products/categories");
+  return response.data.data.categories;
+};
+
+const getProduct = async (id: string): Promise<Product> => {
+  const response = await api.get<ProductResponse>(`/products/${id}`);
+  return response.data.data.product;
 };
 
 export {
   getProducts,
+  getProductsPage,
   getProduct,
-  getProductsByCategory,
   getCategories,
   searchProducts,
 };
+
+

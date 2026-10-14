@@ -3,40 +3,47 @@ import { ProductCardComponent } from "./ProductCard";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useWishList } from "@/context/WishlistProvider";
 import { useCart } from "@/context/CartProvider";
-import { useAuth } from "@/context/AuthProvider";
-
-import { useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useLocation, useNavigate } from "react-router-dom";
 import { Product } from "@/types/ecommerce";
+import { useI18n } from "@/i18n";
+import EmptyState from "./EmptyState";
+import LoadMoreButton from "./LoadMoreButton";
+import { FaRegFaceFrown } from "react-icons/fa6";
 
 type ProductsProps = {
   allProducts: Product[];
   heading: string;
   subHeading?: string;
+  onRetry?: () => void;
+  loadMore?: {
+    hasMore: boolean;
+    isLoading: boolean;
+    isError: boolean;
+    onFetch: () => void;
+    showEndMessage?: boolean;
+  };
 };
 
-const Products = ({ allProducts, heading, subHeading }: ProductsProps) => {
+const Products = ({
+  allProducts,
+  heading,
+  subHeading,
+  onRetry,
+  loadMore,
+}: ProductsProps) => {
   const { handleToggleWishlist, isInWishList } = useWishList();
   const { isInStock, isInCart, handleAddToCart } = useCart();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { t } = useI18n();
 
-  const handlePath = () => {
-    navigate("/login", { state: { from: { pathname: location.pathname } } });
-  };
-
-  const { authState } = useAuth();
+  if (allProducts.length === 0)
+    return (
+      <EmptyState
+        icon={<FaRegFaceFrown size={50} />}
+        title={t("state.noProducts")}
+        desc={t("state.noProductsDesc")}
+        actionLabel={onRetry ? t("state.retry") : undefined}
+        onAction={onRetry}
+      />
+    );
 
   return (
     <section className="custom-container section-padding bg-base-bg dark:bg-dark-surface">
@@ -46,31 +53,26 @@ const Products = ({ allProducts, heading, subHeading }: ProductsProps) => {
           <ProductCardComponent key={item._id}>
             <ProductCardComponent.Image
               path={`/products/${item._id}`}
-              src={item.images[0]}
+              src={item.images?.[0]}
               alt={item.title}
               discount={item.discountPercentage}
-              
               className="w-full h-35 md:h-40"
             >
-              {authState.isAuthenticated ? (
-                <button
-                  className={`${isInWishList(item._id) ? "text-danger" : ""} absolute bg-base-bg top-1 
-                right-2 sm:right-3 p-2  backdrop-blur-sm rounded-full  
+              <button
+                type="button"
+                className={`${isInWishList(item._id) ? "text-danger" : ""} absolute bg-base-bg top-1
+                end-2 sm:end-3 p-2  backdrop-blur-sm rounded-full
               hover:scale-110 transition z-10 shadow-sm`}
-                  onClick={() => handleToggleWishlist(item)}
-                >
-                  {isInWishList(item._id) ? <FaHeart /> : <FaRegHeart />}
-                </button>
-              ) : (
-                <button
-                  className={` absolute bg-base-bg top-1 
-                right-2 sm:right-3 p-2  backdrop-blur-sm rounded-full  
-              hover:scale-110 transition z-10 shadow-sm`}
-                  onClick={() => setIsDialogOpen(true)}
-                >
-                  <FaRegHeart />
-                </button>
-              )}
+                onClick={() => handleToggleWishlist(item)}
+                aria-label={
+                  isInWishList(item._id)
+                    ? t("wishlist.remove")
+                    : t("wishlist.add")
+                }
+                aria-pressed={isInWishList(item._id)}
+              >
+                {isInWishList(item._id) ? <FaHeart /> : <FaRegHeart />}
+              </button>
             </ProductCardComponent.Image>
             <ProductCardComponent.Body
               brand={item.brand || "Generic"}
@@ -78,6 +80,7 @@ const Products = ({ allProducts, heading, subHeading }: ProductsProps) => {
               title={item.title}
             >
               <button
+                type="button"
                 onClick={() => handleAddToCart(item)}
                 disabled={!isInStock(item) || isInCart(item)}
                 className={`${
@@ -89,41 +92,27 @@ const Products = ({ allProducts, heading, subHeading }: ProductsProps) => {
                 } text-white text-xs md:text-sm max-sm:self-stretch max-sm:mx-3  max-sm:mb-1 px-3 py-2 rounded-xl transition`}
               >
                 {!isInStock(item)
-                  ? "Out of Stock"
+                  ? t("product.outOfStock")
                   : isInCart(item)
-                    ? "In Cart"
-                    : "Add +"}
+                    ? t("product.added")
+                    : t("product.add")}
               </button>
             </ProductCardComponent.Body>
           </ProductCardComponent>
         ))}
-      </div>{" "}
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Access Denied</AlertDialogTitle>
-            <AlertDialogDescription>
-              You Need to Logged in to View your Cart Would you like to log in
-              now?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                handlePath();
-                setIsDialogOpen(false);
-              }}
-            >
-              Log In
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      </div>
+      {loadMore && (
+        <LoadMoreButton
+          hasMore={loadMore.hasMore}
+          isLoading={loadMore.isLoading}
+          isError={loadMore.isError}
+          onFetch={loadMore.onFetch}
+          showEndMessage={loadMore.showEndMessage ?? true}
+        />
+      )}
     </section>
   );
 };
 
 export default Products;
+

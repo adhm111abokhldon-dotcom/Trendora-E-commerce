@@ -5,6 +5,8 @@ import { CiLogin } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/context/AuthProvider";
+import { useI18n } from "@/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 import {
   AlertDialog,
@@ -18,33 +20,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { useState } from "react";
-
 const TopHeader = () => {
-  const { cartItems, handleLogoutCart, cartItemsCount } = useCart();
+  const { handleLogoutCart, cartItemsCount } = useCart();
   const { wishListItemsCount, handleLogoutWishList } = useWishList();
   const { authState, handleLogout } = useAuth();
+  const { t } = useI18n();
 
   const navigate = useNavigate();
-
-  const [isCartDialogOpen, setIsCartDialogOpen] = useState(false);
-  const [isWLDialogOpen, setIsWLDialogOpen] = useState(false);
 
   const handleConfirmLogout = () => {
     handleLogoutCart();
     handleLogoutWishList();
     handleLogout();
     navigate("/");
-  };
-
-  const goToTargetPath = (targetPath: string) => {
-    navigate("/login", {
-      state: {
-        from: {
-          pathname: targetPath,
-        },
-      },
-    });
   };
 
   return (
@@ -65,7 +53,10 @@ const TopHeader = () => {
         </h2>
       </div>
       {/* Icons */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
+        {/* Language */}
+        <LanguageSwitcher />
+
         {/* Auth */}
         {authState.isAuthenticated ? (
           <AlertDialog>
@@ -74,6 +65,8 @@ const TopHeader = () => {
                 className="text-base-text flex-center text-xl md:text-3xl
                 dark:text-dark-text hover:text-accent-trendora
                 transition duration-300"
+                aria-label={t("nav.account")}
+                title={t("nav.account")}
               >
                 <FaUserCircle />
               </button>
@@ -81,23 +74,22 @@ const TopHeader = () => {
 
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>{t("auth.logoutTitle")}</AlertDialogTitle>
 
                 <AlertDialogDescription>
-                  This will end your current session and you will need to log in
-                  again to access your cart and favorites.
+                  {t("auth.logoutDesc")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{t("auth.cancel")}</AlertDialogCancel>
 
                 <AlertDialogAction
                   onClick={handleConfirmLogout}
                   className="bg-destructive hover:bg-destructive/90
                   text-destructive-foreground"
                 >
-                  Log Out
+                  {t("auth.logoutConfirm")}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -108,150 +100,50 @@ const TopHeader = () => {
             className="text-base-text flex-center text-xl md:text-3xl
             dark:text-dark-text hover:text-accent-trendora
             transition duration-300"
+            aria-label={t("nav.login")}
+            title={t("nav.login")}
           >
             <CiLogin />
           </Link>
         )}
         {/* Cart Icon */}
-        <AlertDialog open={isCartDialogOpen} onOpenChange={setIsCartDialogOpen}>
-          {authState.isAuthenticated ? (
-            <Link
-              to="/cart"
-              className="relative text-base-text dark:text-dark-text
-              hover:text-accent-trendora transition duration-300"
-            >
-              <FaShoppingCart className="text-xl md:text-3xl" />
+        <Link
+          to="/cart"
+          className="relative text-base-text dark:text-dark-text
+          hover:text-accent-trendora transition duration-300"
+          aria-label={t("nav.cart")}
+        >
+          <FaShoppingCart className="text-xl md:text-3xl" />
 
-              <span
-                className="absolute -top-2 md:w-6 md:h-6 md:-right-3 md:-top-3
-                md:text-base -right-2.5 w-4 h-4 bg-accent-trendora
-                text-base-text dark:text-dark-text text-[10px]
-                rounded-full flex items-center justify-center font-bold"
-              >
-                {cartItems.length}
-              </span>
-            </Link>
-          ) : (
-            <>
-              <AlertDialogTrigger>
-                <button
-                  className="relative flex-center text-base-text
-                  dark:text-dark-text hover:text-accent-trendora
-                  transition duration-300"
-                >
-                  <FaShoppingCart className="text-xl md:text-3xl" />
-
-                  <span
-                    className="absolute -top-2 md:w-6 md:h-6 md:-right-3
-                    md:-top-3 md:text-base -right-2.5 w-4 h-4
-                    bg-accent-trendora text-base-text dark:text-dark-text
-                    text-[10px] rounded-full flex items-center justify-center
-                    font-bold"
-                  >
-                    {cartItemsCount}
-                  </span>
-                </button>
-              </AlertDialogTrigger>
-
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Access Denied</AlertDialogTitle>
-
-                  <AlertDialogDescription>
-                    You need to Log in to View your Cart Would you like to log
-                    in now?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setIsCartDialogOpen(false)}>
-                    Cancel
-                  </AlertDialogCancel>
-
-                  <AlertDialogAction
-                    onClick={() => {
-                      goToTargetPath("/cart");
-                      setIsCartDialogOpen(false);
-                    }}
-                  >
-                    Log In
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </>
-          )}
-        </AlertDialog>
+          <span
+            className="absolute -top-2 md:w-6 md:h-6 md:-right-3 md:-top-3
+            md:text-base -right-2.5 w-4 h-4 bg-accent-trendora
+            text-base-text dark:text-dark-text text-[10px]
+            rounded-full flex items-center justify-center font-bold"
+          >
+            {cartItemsCount}
+          </span>
+        </Link>
 
         {/* Wishlist Icon */}
-        <AlertDialog open={isWLDialogOpen} onOpenChange={setIsWLDialogOpen}>
-          {authState.isAuthenticated ? (
-            <Link
-              to="/wishList"
-              className="relative text-base-text dark:text-dark-text
-              hover:text-accent-trendora transition duration-300"
-            >
-              <FaHeart className="text-xl md:text-3xl" />
+        <Link
+          to="/wishList"
+          className="relative text-base-text dark:text-dark-text
+          hover:text-accent-trendora transition duration-300"
+          aria-label={t("nav.wishlist")}
+        >
+          <FaHeart className="text-xl md:text-3xl" />
 
-              <span
-                className="absolute -top-2 -right-2.5 w-4 h-4
-                md:w-6 md:h-6 md:-right-3 md:-top-3 bg-accent-trendora
-                text-base-text dark:text-dark-text text-[10px]
-                md:text-base rounded-full flex items-center justify-center
-                font-bold"
-              >
-                {wishListItemsCount}
-              </span>
-            </Link>
-          ) : (
-            <>
-              <AlertDialogTrigger>
-                <button
-                  className="relative flex-center text-base-text
-                  dark:text-dark-text hover:text-accent-trendora
-                  transition duration-300"
-                >
-                  <FaHeart className="text-xl md:text-3xl" />
-
-                  <span
-                    className="absolute -top-2 -right-2.5 w-4 h-4
-                    md:w-6 md:h-6 md:-right-3 md:-top-3
-                    bg-accent-trendora text-base-text dark:text-dark-text
-                    text-[10px] md:text-base rounded-full flex items-center
-                    justify-center font-bold"
-                  >
-                    {wishListItemsCount}
-                  </span>
-                </button>
-              </AlertDialogTrigger>
-
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Access Denied</AlertDialogTitle>
-
-                  <AlertDialogDescription>
-                    You Need to Logged in to View your WishList Would you like
-                    to log in now?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setIsWLDialogOpen(false)}>
-                    Cancel
-                  </AlertDialogCancel>
-
-                  <AlertDialogAction
-                    onClick={() => {
-                      goToTargetPath("/wishList");
-                      setIsWLDialogOpen(false);
-                    }}
-                  >
-                    Log In
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </>
-          )}
-        </AlertDialog>
+          <span
+            className="absolute -top-2 -right-2.5 w-4 h-4
+            md:w-6 md:h-6 md:-right-3 md:-top-3 bg-accent-trendora
+            text-base-text dark:text-dark-text text-[10px]
+            md:text-base rounded-full flex items-center justify-center
+            font-bold"
+          >
+            {wishListItemsCount}
+          </span>
+        </Link>
       </div>
     </div>
   );

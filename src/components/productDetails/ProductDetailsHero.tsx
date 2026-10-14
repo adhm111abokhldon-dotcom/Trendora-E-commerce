@@ -10,14 +10,17 @@ import { FaRegStar } from "react-icons/fa6";
 import { useCart } from "@/context/CartProvider";
 import getProductRating from "@/utils/getProductRating";
 import { Product } from "@/types/ecommerce";
+import { useI18n } from "@/i18n";
 
 const ProductDetailsHero = ({ product }: { product: Product }) => {
   const [currentImg, setCurrentImg] = useState("");
   const { handleAddToCart, cartItems } = useCart();
+  const { t } = useI18n();
 
   const images = product?.images ?? [];
   const isInCart = cartItems.some((item) => item._id === product?._id);
-  const isInStock = product?.availabilityStatus === "In Stock";
+  const stock = Number(product?.stock ?? 0);
+  const isInStock = stock > 0;
   const canAddToCart = isInStock && !isInCart;
 
   useEffect(() => {
@@ -37,7 +40,7 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
   if (!product || images.length === 0) {
     return (
       <div className="py-8 text-center text-base-text dark:text-dark-text">
-        Loading..
+        {t("state.loading")}
       </div>
     );
   }
@@ -74,7 +77,7 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
       <div className="w-full md:w-1/2">
         <div className="mb-3 flex w-full justify-center">
           <img
-            className="h-40 w-45 object-cover"
+            className="h-40 w-45 object-contain"
             src={activeImage}
             alt={product.title}
             loading="lazy"
@@ -90,7 +93,10 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
               className={`w-1/3 cursor-pointer transition ${
                 activeImage === img ? "border border-accent-trendora" : ""
               }`}
-              aria-label={`Show ${product.title} image ${index + 1}`}
+              aria-label={t("details.showImage", {
+                title: product.title,
+                n: index + 1,
+              })}
             >
               <img
                 className="h-full w-full object-cover"
@@ -114,22 +120,23 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
 
         <div className="text-base font-medium text-base-text dark:text-dark-text md:text-lg">
           <p>
-            availability:{" "}
+            {t("details.availability")}:{" "}
             <span className={isInStock ? "text-success" : "text-danger"}>
-              {isInStock ? "In Stock" : "Out of Stock"}
+              {isInStock ? t("details.inStock") : t("product.outOfStock")}
             </span>
           </p>
           <p>
-            price:{" "}
+            {t("details.price")}:{" "}
             <span className="text-accent-trendora">${product.price}</span>
           </p>
-          <p>
-            Harry Up Only{" "}
-            <span className="text-accent-trendora">{product.stock}</span> Left
-          </p>
+          {isInStock && (
+            <p className="text-accent-trendora">
+              {t("details.stockLeft", { n: stock })}
+            </p>
+          )}
 
           <div className="flex items-center gap-0.5">
-            <span>rating:</span>
+            <span>{t("details.rating")}:</span>
             {renderStars()}
           </div>
         </div>
@@ -147,14 +154,14 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
           } text-base-text dark:text-dark-text`}
         >
           {!isInStock ? (
-            "Out of Stock"
+            t("product.outOfStock")
           ) : isInCart ? (
             <>
-              Item in Cart <FaCheckCircle />
+              {t("details.inCart")} <FaCheckCircle />
             </>
           ) : (
             <>
-              Add to Cart{" "}
+              {t("details.addToCart")}{" "}
               <FaShoppingCart className="transition group-hover:scale-[1.1]" />
             </>
           )}
@@ -165,3 +172,4 @@ const ProductDetailsHero = ({ product }: { product: Product }) => {
 };
 
 export default ProductDetailsHero;
+

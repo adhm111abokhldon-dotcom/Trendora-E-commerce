@@ -4,8 +4,11 @@ import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
-import { Product } from "@/types/ecommerce";
 import { searchProducts } from "@/api/products";
+import flattenProductPages from "@/utils/flattenProductPages";
+import LoadMoreButton from "@/components/ui/LoadMoreButton";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useI18n } from "@/i18n";
 
 type SearchLayProps = {
   isOpen: boolean;
@@ -14,8 +17,9 @@ type SearchLayProps = {
 
 const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
   const [input, setInput] = useState("");
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [debouncedInput, setDebouncedInput] = useState("");
+  const [isDebouncing, setIsDebouncing] = useState(false);
+  const { t } = useI18n();
 
   const variants = {
     initial: { y: "-10%", opacity: 0 },
@@ -31,33 +35,51 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
     }
   }, [isOpen]);
 
+  // Debounce the query. The query key includes the term, so changing the
+  // search resets accumulated results — batches from a previous term are
+  // never appended to the new one.
   useEffect(() => {
-    if (!input.trim()) {
-      setProducts([]);
-      setIsLoading(false);
+    const trimmed = input.trim();
+    if (!trimmed) {
+      setDebouncedInput("");
+      setIsDebouncing(false);
       return;
     }
-
-    setIsLoading(true);
-
-    const timer = setTimeout(() => {
-      searchProducts(input)
-        .then((data) => setProducts(data))
-        .catch((error) => {
-          console.error("error", error);
-          setProducts([]);
-        })
-        .finally(() => setIsLoading(false));
-    }, 400);
-
+    if (trimmed === debouncedInput) {
+      setIsDebouncing(false);
+      return;
+    }
+    setIsDebouncing(true);
+    const timer = setTimeout(() => setDebouncedInput(trimmed), 400);
     return () => clearTimeout(timer);
-  }, [input]);
+  }, [input, debouncedInput]);
 
-  //
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["searchProducts", debouncedInput],
+    queryFn: ({ pageParam }) =>
+      searchProducts(debouncedInput, { page: pageParam, limit: 10 }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.page + 1 : undefined,
+    enabled: isOpen && debouncedInput.length > 0,
+  });
+
+  const products = flattenProductPages(data?.pages);
+  const isLoadingResults = isDebouncing || isLoading;
+
   useEffect(() => {
     if (!isOpen) {
       setInput("");
-      setProducts([]);
+      setDebouncedInput("");
+      setIsDebouncing(false);
     }
   }, [isOpen]);
 
@@ -99,30 +121,30 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
                  transition duration-300 rounded-full bg-base-bg dark:bg-dark-surface
                   px-3"
               >
-                <button className="text-base-text dark:text-dark-text mr-2">
+                <button className="text-base-text dark:text-dark-text me-2" aria-label={t("nav.search")}>
                   <AiOutlineSearch className="text-lg" />
                 </button>
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   type="text"
-                  placeholder="Search for products..."
+                  placeholder={t("nav.searchPlaceholder")}
+                  aria-label={t("nav.searchPlaceholder")}
                   className="text-sm bg-transparent flex-1 focus:outline-none
                    text-base-text dark:text-dark-text"
                 />
 
-                {/*  */}
-                {isLoading && (
+                {isLoadingResults && (
                   <span
-                    className="absolute right-4 top-full mt-3 text-xs
+                    className="absolute end-4 top-full mt-3 text-xs
                    text-accent animate-pulse"
                   >
-                    Searching...
+                    {t("nav.searching")}
                   </span>
                 )}
 
                 {/*  */}
-                {!isLoading && products.length > 0 && (
+                {!isLoadingResults && products.length > 0 && (
                   <motion.ul
                     initial={{ y: "10%", opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -151,14 +173,38 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
                         </Link>
                       </li>
                     ))}
+                    {(hasNextPage || isFetchingNextPage || isError) && (
+                      <li className="px-2 list-none">
+                        <LoadMoreButton
+                          compact
+                          hasMore={hasNextPage}
+                          isLoading={isFetchingNextPage}
+                          isError={isError}
+                          onFetch={() => fetchNextPage()}
+                          showEndMessage={false}
+                        />
+                      </li>
+                    )}
                   </motion.ul>
                 )}
 
-                {/*  */}
-                {!isLoading && input && products.length === 0 && (
-                  <p className="absolute top-full left-4 mt-2 text-xs text-danger">
-                    No products found.
-                  </p>
+                {!isLoadingResults && input.trim() && products.length === 0 && (
+                  isError ? (
+                    <div className="absolute top-full start-4 mt-2">
+                      <LoadMoreButton
+                        compact
+                        hasMore={false}
+                        isLoading={false}
+                        isError={true}
+                        onFetch={() => refetch()}
+                        showEndMessage={false}
+                      />
+                    </div>
+                  ) : (
+                    <p className="absolute top-full start-4 mt-2 text-xs text-danger">
+                      {t("nav.noResults")}
+                    </p>
+                  )
                 )}
               </motion.div>
 
@@ -167,6 +213,7 @@ const SearchLay = ({ isOpen, setIsOpen }: SearchLayProps) => {
                 className=" text-base-text dark:text-dark-text 
                 hover:text-accent-trendora ms-2 transition flex items-center 
                  justify-center"
+                aria-label={t("nav.close")}
               >
                 <IoClose className="text-4xl" />
               </button>

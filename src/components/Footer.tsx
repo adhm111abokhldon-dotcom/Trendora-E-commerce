@@ -3,40 +3,51 @@ import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useI18n } from "@/i18n";
 
 const footerLinks = [
   {
-    title: "Shop",
+    titleKey: "footer.shop" as const,
     links: [
       {
-        label: "New Arrivals",
+        labelKey: "footer.newArrivals" as const,
         url: "/customCategory/new-arrivals",
         isRoute: true,
       },
       {
-        label: "Best Sellers",
+        labelKey: "footer.bestSellers" as const,
         url: "/customCategory/best-sellers",
         isRoute: true,
       },
-      { label: "Hot Drops", url: "/customCategory/hot-drops", isRoute: true },
-      { label: "Trending Now", url: "/customCategory/trending", isRoute: true },
+      {
+        labelKey: "footer.hotDrops" as const,
+        url: "/customCategory/hot-drops",
+        isRoute: true,
+      },
+      {
+        labelKey: "footer.trending" as const,
+        url: "/customCategory/trending",
+        isRoute: true,
+      },
     ],
   },
   {
-    title: "Support",
+    titleKey: "footer.support" as const,
     links: [
-      { label: "Contact Us", url: "#contact-us", isRoute: false },
-      { label: "FAQs", url: "#FAQ", isRoute: false },
-      { label: "Shipping & Delivery", url: "#", isRoute: false },
-      { label: "Track Order", url: "#", isRoute: false },
+      { labelKey: "nav.contact" as const, url: "#contact-us", isRoute: false },
+      { labelKey: "footer.faqs" as const, url: "#FAQ", isRoute: false },
+      { labelKey: "footer.shipping" as const, url: "#", isRoute: false },
+      { labelKey: "footer.trackOrder" as const, url: "#", isRoute: false },
+      { labelKey: "footer.demoLogin" as const, url: "/login", isRoute: true },
     ],
   },
   {
-    title: "Legal",
+    titleKey: "footer.legal" as const,
     links: [
-      { label: "Terms of Service", url: "#", isRoute: false },
-      { label: "Privacy Policy", url: "#", isRoute: false },
-      { label: "Return Policy", url: "#", isRoute: false },
+      { labelKey: "footer.terms" as const, url: "#", isRoute: false },
+      { labelKey: "footer.privacy" as const, url: "#", isRoute: false },
+      { labelKey: "footer.returnPolicy" as const, url: "#", isRoute: false },
     ],
   },
 ];
@@ -69,12 +80,21 @@ const contactData = [
 ];
 
 export default function Footer() {
+  const { t } = useI18n();
+  const [email, setEmail] = useState("");
+  const [subStatus, setSubStatus] = useState<"idle" | "ok" | "error">("idle");
+
+  const handleSubscribe = () => {
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    setSubStatus(valid ? "ok" : "error");
+    if (valid) setEmail("");
+  };
+
   return (
     <footer
       id="contact-us"
       className="bg-base-surface dark:bg-dark-bg border-t border-border-light
        dark:border-border-dark pt-15 md:pt-20 pb-8 mt-10"
-      dir="ltr"
     >
       <div className="custom-container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
@@ -83,51 +103,67 @@ export default function Footer() {
               Trendora
             </h3>
             <p className="text-base-text-muted dark:text-dark-text-muted text-sm max-w-sm leading-relaxed">
-              Your ultimate destination for modern fashion and lifestyle trends.
-              <br></br>
-              Elevate your wardrobe with style.
+              {t("footer.tagline")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-2 max-w-md mt-2">
               <input
                 type="email"
-                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setSubStatus("idle");
+                }}
+                placeholder={t("footer.subscribePlaceholder")}
+                aria-label={t("footer.subscribePlaceholder")}
                 className="flex-1 px-4 py-2.5 bg-base-bg dark:bg-dark-surface border border-border-light dark:border-border-dark rounded-card text-base-text dark:text-dark-text text-sm focus:border-accent-trendora focus:ring-1 focus:ring-accent-trendora transition-all duration-300"
               />
 
               <button
                 type="button"
+                onClick={handleSubscribe}
                 className="px-6 py-2.5 bg-base-text dark:bg-dark-text text-base-surface dark:text-dark-bg font-bold rounded-card text-sm hover:bg-accent-trendora hover:text-base-text dark:hover:bg-accent-trendora dark:hover:text-base-text transition-all duration-300 active:scale-95"
               >
-                Subscribe
+                {t("footer.subscribe")}
               </button>
+            </div>
+
+            <div aria-live="polite" className="text-xs min-h-4">
+              {subStatus === "ok" && (
+                <span className="text-green-600 dark:text-green-400">
+                  {t("footer.subscribed")}
+                </span>
+              )}
+              {subStatus === "error" && (
+                <span className="text-red-500">{t("footer.invalidEmail")}</span>
+              )}
             </div>
           </div>
 
           {footerLinks.map((group) => (
-            <div key={group.title} className="flex flex-col gap-4">
+            <div key={group.titleKey} className="flex flex-col gap-4">
               <h4
                 className="font-heading font-bold text-base-text dark:text-dark-text
                uppercase tracking-wider text-sm"
               >
-                {group.title}
+                {t(group.titleKey)}
               </h4>
               <ul className="flex flex-col gap-2.5">
                 {group.links.map((link) => (
-                  <li key={link.label}>
+                  <li key={link.labelKey}>
                     {link.isRoute ? (
                       <Link
                         className="w-full h-full text-base-text-muted dark:text-dark-text-muted text-sm hover:text-accent-trendora dark:hover:text-accent-trendora transition-colors duration-200"
                         to={link.url}
                       >
-                        {link.label}
+                        {t(link.labelKey)}
                       </Link>
                     ) : (
                       <a
                         href={link.url}
                         className="text-base-text-muted dark:text-dark-text-muted text-sm hover:text-accent-trendora dark:hover:text-accent-trendora transition-colors duration-200"
                       >
-                        {link.label}
+                        {t(link.labelKey)}
                       </a>
                     )}
                   </li>
@@ -141,7 +177,7 @@ export default function Footer() {
           className="border-t border-border-light dark:border-border-dark
          pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-base-text-faint"
         >
-          <div>&copy; 2026 Trendora. All rights reserved.</div>
+          <div>{t("footer.rights")}</div>
 
           <ul className="flex  gap-4 items-center">
             {contactData.map((link) => (

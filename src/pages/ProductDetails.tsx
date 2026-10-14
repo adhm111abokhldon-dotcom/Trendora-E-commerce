@@ -7,41 +7,61 @@ import Products from "@/components/ui/Products";
 import ProductSkeleton from "@/components/ui/ProductSkeleton";
 import Title from "@/components/ui/Title";
 import TitleSkeleton from "@/components/ui/TitleSkeleton";
-import { useQuery } from "@tanstack/react-query";
+import EmptyState from "@/components/ui/EmptyState";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getProduct, getProductsByCategory } from "@/api/products";
+import { getProduct, getProductsPage } from "@/api/products";
+import flattenProductPages from "@/utils/flattenProductPages";
+import { useI18n } from "@/i18n";
+import { FaRegFaceFrown } from "react-icons/fa6";
+
+const PAGE_SIZE = 10;
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const fetchProduct = () => getProduct(id);
+  const { t } = useI18n();
+  const fetchProduct = () => getProduct(id as string);
 
   const {
     data: product,
     isLoading: isProductLoading,
-    error: productError,
+    isError: isProductError,
   } = useQuery({
     queryKey: ["product", id],
     queryFn: fetchProduct,
   });
 
-  const fetchProducts = async () => {
-    if (!product?.category) {
-      throw new Error("category is missing");
-    }
-    return getProductsByCategory(product.category);
-  };
-
   const {
-    data: products,
+    data: relatedPages,
     isLoading: isRelatedLoading,
-    error: relatedError,
-  } = useQuery({
-    queryKey: ["products", product?.category],
-    queryFn: fetchProducts,
+    isError: isRelatedError,
+    refetch: refetchRelated,
+    fetchNextPage: fetchNextRelatedPage,
+    hasNextPage: hasMoreRelated,
+    isFetchingNextPage: isFetchingMoreRelated,
+  } = useInfiniteQuery({
+    queryKey: ["relatedProducts", product?.category],
+    queryFn: ({ pageParam }) =>
+      getProductsPage({
+        page: pageParam,
+        limit: PAGE_SIZE,
+        category: product?.category ?? "",
+      }),
     enabled: !!product?.category,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.page + 1 : undefined,
   });
-  if (productError) return <p>{productError.message}</p>;
-  if (relatedError) return <p>{relatedError.message}</p>;
+
+  if (isProductError)
+    return (
+      <EmptyState
+        icon={<FaRegFaceFrown size={50} />}
+        title={t("state.notFound")}
+        desc={t("state.errorDesc")}
+      />
+    );
+
   if (isRelatedLoading || isProductLoading) {
     return (
       <>
@@ -64,7 +84,19 @@ const ProductDetails = () => {
       </>
     );
   }
-  const relatedProducts = products;
+  if (!product)
+    return (
+      <EmptyState
+        icon={<FaRegFaceFrown size={50} />}
+        title={t("state.notFound")}
+        desc={t("state.errorDesc")}
+      />
+    );
+
+  const relatedProducts = flattenProductPages(relatedPages?.pages).filter(
+    (p) => p._id !== product._id,
+  );
+  const hasLoadedMoreRelated = (relatedPages?.pages.length ?? 0) > 1;
   return (
     <PageTransition>
       <div className="bg-base-bg dark:bg-dark-surface">
@@ -75,17 +107,25 @@ const ProductDetails = () => {
         </section>
 
         <Products
-          heading={"You May Also Like"}
-          subHeading={"Discover similar products handpicked just for you."}
+          heading={t("details.related")}
+          subHeading={t("details.relatedSub")}
           allProducts={relatedProducts}
+          onRetry={isRelatedError ? () => refetchRelated() : undefined}
+          loadMore={{
+            hasMore: hasMoreRelated,
+            isLoading: isFetchingMoreRelated,
+            isError: isRelatedError && relatedProducts.length > 0,
+            onFetch: () => fetchNextRelatedPage(),
+            showEndMessage: hasLoadedMoreRelated,
+          }}
         />
         <section className="custom-container section-padding">
           <StoreFeatures />
         </section>
         <section className="custom-container section-padding">
           <Title
-            heading={"Client Testimonials"}
-            subHeading={"Real reviews from people who trusted us."}
+            heading={t("details.reviewsTitle")}
+            subHeading={t("details.reviewsSub")}
           />
           <ProductReview product={product} />
         </section>

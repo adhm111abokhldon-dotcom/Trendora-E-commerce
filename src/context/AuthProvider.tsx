@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import authReducer, { initialAuthState } from "./authReducer";
+import { User } from "@/types/ecommerce";
 
 type AuthContextType = {
   authState: typeof initialAuthState;
-  handleLogin: (userData: any) => void;
+  handleLogin: (data: { accessToken: string; user: User }) => void;
   handleLogout: () => void;
 };
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -26,8 +27,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             payload: { user: null, isAuthenticated: false },
           });
         }
-      } catch (error) {
-        console.error(error);
+      } catch {
         authDispatch({
           type: "INITIALIZE_AUTH",
           payload: { user: null, isAuthenticated: false },
@@ -37,10 +37,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-  const handleLogin = (userData: any) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", userData.accessToken);
-    authDispatch({ type: "LOGIN_SUCCESS", payload: userData });
+  const handleLogin = ({ accessToken, user }: { accessToken: string; user: User }) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", accessToken);
+    authDispatch({ type: "LOGIN_SUCCESS", payload: { user } });
   };
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -63,3 +63,4 @@ export const useAuth = () => {
 };
 
 export default AuthProvider;
+

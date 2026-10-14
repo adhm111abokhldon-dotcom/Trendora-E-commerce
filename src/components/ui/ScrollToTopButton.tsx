@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BiSolidUpArrowCircle } from "react-icons/bi";
+import { useI18n } from "@/i18n";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -36,9 +38,9 @@ const ScrollToTopButton = () => {
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="fixed bottom-6 right-6 z-50 flex-center h-12 w-12  rounded-full
+          className="fixed bottom-6 end-6 z-50 flex-center h-12 w-12  rounded-full
             shadow-lg shadow-zinc-900/20  "
-          aria-label="Scroll to top"
+          aria-label={t("scrollTop")}
         >
           <BiSolidUpArrowCircle className="size-full fill-base-text dark:fill-dark-text text-accent-hover" />
         </motion.button>

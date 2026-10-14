@@ -7,6 +7,7 @@ import SideMenuNav from "./SideMenuNav";
 import { Link } from "react-router-dom";
 import { FaMoon } from "react-icons/fa";
 import { IoIosSunny } from "react-icons/io";
+import { useI18n } from "@/i18n";
 
 type BtmHeaderProps = {
   theme: string;
@@ -16,10 +17,11 @@ type BtmHeaderProps = {
 const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { t } = useI18n();
   const NavData = [
-    { to: "/", title: "Home", isRoute: true },
-    { to: "/categories", title: "Categories", isRoute: true },
-    { to: "#contact-us", title: "Contact Us", isRoute: false },
+    { to: "/", title: t("nav.home"), isRoute: true },
+    { to: "/categories", title: t("nav.categories"), isRoute: true },
+    { to: "#contact-us", title: t("nav.contact"), isRoute: false },
   ];
   return (
     <div
@@ -50,6 +52,8 @@ const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
       <button
         onClick={() => setIsSideMenuOpen(true)}
         className="md:hidden hover:text-accent-trendora text-base-text dark:text-dark-text text-2xl"
+        aria-label={t("nav.menu")}
+        aria-expanded={isSideMenuOpen}
       >
         <MenuIcon />
       </button>
@@ -62,15 +66,16 @@ const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
          border-border-light dark:border-border-dark hover:border-accent-trendora transition
           duration-300 rounded-full bg-base-bg dark:bg-dark-surface px-2 cursor-pointer"
         >
-          <button className="text-base-text dark:text-dark-text p-1">
+          <button className="text-base-text dark:text-dark-text p-1" aria-label={t("nav.search")}>
             <AiOutlineSearch className="text-2xl" />
           </button>
           <input
             type="text"
-            placeholder="Search..."
+            placeholder={t("nav.searchShort")}
             className="bg-transparent  text-base-text dark:text-dark-text focus:outline-none
            w-full text-lg cursor-pointer"
             readOnly
+            aria-label={t("nav.search")}
           />
         </div>
 
@@ -79,6 +84,7 @@ const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
           onClick={() => setIsSearchOpen(true)}
           className="rounded-full md:hidden flex items-center justify-center
          hover:bg-accent-trendora  transition  text-base-text dark:text-dark-text"
+          aria-label={t("nav.search")}
         >
           <AiOutlineSearch className="text-xl" />
         </button>
@@ -96,6 +102,7 @@ const BtmHeader = ({ theme, setTheme }: BtmHeaderProps) => {
           onClick={() =>
             theme === "light" ? setTheme("dark") : setTheme("light")
           }
+          aria-label={t("nav.theme.toggle")}
         >
           {theme === "light" ? <FaMoon></FaMoon> : <IoIosSunny></IoIosSunny>}
         </button>

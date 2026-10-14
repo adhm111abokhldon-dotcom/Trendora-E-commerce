@@ -1,11 +1,19 @@
+import { User } from "@/types/ecommerce";
 
-type authReducer = (state: typeof initialAuthState, action: { type: string; payload?: any }) => {
-  user: any;
+type AuthState = {
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 };
 
-export const initialAuthState = {
+type AuthAction = {
+  type: string;
+  payload?: Partial<AuthState>;
+};
+
+type authReducer = (state: AuthState, action: AuthAction) => AuthState;
+
+export const initialAuthState: AuthState = {
   user: null,
   isAuthenticated: false,
   isLoading: true,
@@ -16,7 +24,7 @@ const authReducer: authReducer = (state, action) => {
     case "LOGIN_SUCCESS": {
       return {
         ...state,
-        user: action.payload,
+        user: action.payload?.user ?? null,
         isAuthenticated: true,
         isLoading: false,
       };
@@ -32,8 +40,8 @@ const authReducer: authReducer = (state, action) => {
     case "INITIALIZE_AUTH": {
       return {
         ...state,
-        user: action.payload.user,
-        isAuthenticated: action.payload.isAuthenticated,
+        user: action.payload?.user ?? null,
+        isAuthenticated: action.payload?.isAuthenticated ?? false,
         isLoading: false,
       };
     }
@@ -43,3 +51,4 @@ const authReducer: authReducer = (state, action) => {
 };
 
 export default authReducer;
+
